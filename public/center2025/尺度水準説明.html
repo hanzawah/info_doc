@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>インタラクティブ尺度水準ガイド</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Zen Garden (Warm neutrals like bg-stone-50, with soft complementary accent colors for each scale: blue, green, orange, red) -->
+    <!-- Application Structure Plan: The application is structured as an interactive learning module with four key sections: Overview, The 4 Scales, Quiz Challenge, and Summary. This task-oriented structure (learn, explore, test, review) was chosen over a linear report format to enhance user engagement and knowledge retention for the target audience (students). Key interactions include a clickable hierarchy diagram, a tabbed interface for exploring each scale with dynamic charts, and a gamified quiz with immediate feedback. This flow guides the user from general concepts to specific details and practical application, fostering a deeper understanding. -->
+    <!-- Visualization & Content Choices: 1. Hierarchy Diagram: (Report Info: Implied hierarchy of scales) -> (Goal: Organize) -> (Viz: Nested HTML/CSS boxes) -> (Interaction: Hover to highlight) -> (Justification: Provides an immediate visual mental model of the relationships between scales.) -> (Library: None, pure CSS). 2. Scale Details: (Report Info: Definitions, examples, applicable stats) -> (Goal: Inform, Compare) -> (Viz: Tabbed content with Chart.js pie/bar/line charts) -> (Interaction: Click tabs, hover examples for tooltips) -> (Justification: Tabs organize complex info cleanly, while charts provide a visual representation of each data type, making abstract concepts concrete.) -> (Library: Chart.js). 3. Quiz: (Report Info: Common Test example questions) -> (Goal: Engage, Assess) -> (Viz: Interactive Q&A interface) -> (Interaction: Click answer buttons for instant feedback) -> (Justification: Active recall is a highly effective learning method.) -> (Library: None, custom JS). 4. Summary Table: (Report Info: All scale characteristics) -> (Goal: Organize, Compare) -> (Viz: HTML Table) -> (Interaction: None) -> (Justification: A dense, scannable summary for review.) -> (Library: None). -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { font-family: 'Noto Sans JP', sans-serif; }
+        .tab-active { 
+            border-color: #4f46e5; 
+            background-color: #eef2ff;
+            color: #312e81;
+            font-weight: 700;
+        }
+        .scale-card { transition: all 0.3s ease; }
+        .quiz-feedback {
+            transition: opacity 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold text-indigo-800">尺度水準インタラクティブガイド</h1>
+            <div class="hidden md:flex space-x-4">
+                <a href="#overview" class="text-stone-600 hover:text-indigo-600">概要</a>
+                <a href="#scales" class="text-stone-600 hover:text-indigo-600">4つの尺度</a>
+                <a href="#quiz" class="text-stone-600 hover:text-indigo-600">力試しクイズ</a>
+                <a href="#summary" class="text-stone-600 hover:text-indigo-600">まとめ</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8">
+
+        <section id="overview" class="mb-16 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-4 text-indigo-900">尺度水準へようこそ</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-stone-700 mb-8">
+                データ分析の世界では、まずデータそのものの「性質」を理解することが不可欠です。尺度水準とは、データが持つ情報の種類とレベルを示すものさしのようなものです。このガイドでは、4つの主要な尺度水準をインタラクティブに学び、データへの理解を深めていきましょう。
+            </p>
+            <div class="p-6 bg-white rounded-xl shadow-lg">
+                <h3 class="text-xl font-bold text-center mb-4">尺度水準の階層構造</h3>
+                <p class="text-center text-stone-600 mb-6">尺度は、より多くの情報を持つものが下位の尺度の性質をすべて含んでいます。この階層を視覚的に理解しましょう。</p>
+                <div class="relative p-4 border-4 border-red-200 bg-red-50 rounded-lg text-center cursor-default">
+                    <span class="font-bold text-red-800">比例尺度 (Ratio)</span>
+                    <div class="absolute top-2 right-2 text-red-500 font-bold text-sm">最も高機能</div>
+                    <div class="relative mt-4 p-4 border-4 border-orange-200 bg-orange-50 rounded-lg">
+                        <span class="font-bold text-orange-800">間隔尺度 (Interval)</span>
+                        <div class="relative mt-4 p-4 border-4 border-green-200 bg-green-50 rounded-lg">
+                            <span class="font-bold text-green-800">順序尺度 (Ordinal)</span>
+                            <div class="relative mt-4 p-4 border-4 border-blue-200 bg-blue-50 rounded-lg">
+                                <span class="font-bold text-blue-800">名義尺度 (Nominal)</span>
+                                <div class="absolute bottom-2 right-2 text-blue-500 font-bold text-sm">最も基本的</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="scales" class="mb-16 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-8 text-indigo-900">4つの尺度を詳しく見てみよう</h2>
+            <div id="tabs" class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
+                <button data-tab="nominal" class="tab-btn p-4 text-center border-b-4 rounded-t-lg transition duration-300">名義尺度</button>
+                <button data-tab="ordinal" class="tab-btn p-4 text-center border-b-4 rounded-t-lg transition duration-300">順序尺度</button>
+                <button data-tab="interval" class="tab-btn p-4 text-center border-b-4 rounded-t-lg transition duration-300">間隔尺度</button>
+                <button data-tab="ratio" class="tab-btn p-4 text-center border-b-4 rounded-t-lg transition duration-300">比例尺度</button>
+            </div>
+            <div id="tab-content" class="bg-white rounded-xl shadow-lg p-6 min-h-[400px]">
+            </div>
+        </section>
+
+        <section id="quiz" class="mb-16 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-2 text-indigo-900">力試しクイズ</h2>
+            <p class="max-w-3xl mx-auto text-center text-stone-700 mb-8">
+                共通テストの問題を想定したクイズで、理解度をチェックしてみましょう。
+            </p>
+            <div id="quiz-container" class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+            </div>
+        </section>
+
+        <section id="summary" class="scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-8 text-indigo-900">まとめ：尺度水準一覧</h2>
+             <p class="max-w-3xl mx-auto text-center text-stone-700 mb-8">
+                最後に、4つの尺度水準の主な特徴と、適用できる代表的な統計量を一覧で確認しましょう。この知識は、正しいデータ分析とグラフ作成の第一歩となります。
+            </p>
+            <div class="overflow-x-auto bg-white rounded-xl shadow-lg">
+                <table class="w-full text-left">
+                    <thead class="bg-stone-100">
+                        <tr>
+                            <th class="p-4 font-bold">尺度</th>
+                            <th class="p-4 font-bold">特徴</th>
+                            <th class="p-4 font-bold">演算</th>
+                            <th class="p-4 font-bold">代表的な統計量</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b">
+                            <td class="p-4 font-bold text-blue-700">名義尺度</td>
+                            <td class="p-4">分類・識別。順序なし。</td>
+                            <td class="p-4">=, ≠</td>
+                            <td class="p-4">度数、最頻値</td>
+                        </tr>
+                        <tr class="border-b">
+                            <td class="p-4 font-bold text-green-700">順序尺度</td>
+                            <td class="p-4">順序関係あり。間隔は不等。</td>
+                            <td class="p-4">&gt;, &lt;</td>
+                            <td class="p-4">中央値、四分位数</td>
+                        </tr>
+                        <tr class="border-b">
+                            <td class="p-4 font-bold text-orange-700">間隔尺度</td>
+                            <td class="p-4">順序・等間隔性あり。絶対0なし。</td>
+                            <td class="p-4">+, -</td>
+                            <td class="p-4">平均値、標準偏差</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-red-700">比例尺度</td>
+                            <td class="p-4">すべての性質を持つ。絶対0あり。</td>
+                            <td class="p-4">×, ÷</td>
+                            <td class="p-4">変動係数、すべての統計量</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="text-center p-4 mt-8 text-stone-500 text-sm">
+        <p>&copy; 2025 Interactive Measurement Scale Guide. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const scalesData = {
+                nominal: {
+                    title: '名義尺度 (Nominal Scale)',
+                    color: 'blue',
+                    description: '分類や識別のために用いられる尺度で、各カテゴリ間に順序や大小関係はありません。単なるラベルとして機能します。',
+                    examples: ['性別（男性、女性）', '血液型（A, B, O, AB）', '電話番号', '郵便番号'],
+                    chartType: 'pie',
+                    chartData: {
+                        labels: ['A型', 'B型', 'O型', 'AB型'],
+                        datasets: [{
+                            label: '血液型分布',
+                            data: [40, 20, 30, 10],
+                            backgroundColor: ['#60a5fa', '#34d399', '#facc15', '#f87171']
+                        }]
+                    },
+                    chartOptions: { plugins: { legend: { position: 'top' } } }
+                },
+                ordinal: {
+                    title: '順序尺度 (Ordinal Scale)',
+                    color: 'green',
+                    description: 'カテゴリ間に順序や大小関係はありますが、その間隔の大きさは一定ではありません。「A > B」は言えても、「AとBの差」と「BとCの差」が等しいとは限りません。',
+                    examples: ['満足度（不満, 普通, 満足）', '成績（優, 良, 可）', '順位（1位, 2位, 3位）'],
+                    chartType: 'bar',
+                    chartData: {
+                        labels: ['大変満足', '満足', '普通', '不満', '大変不満'],
+                        datasets: [{
+                            label: 'アンケート結果',
+                            data: [25, 50, 80, 30, 10],
+                            backgroundColor: '#6ee7b7'
+                        }]
+                    },
+                    chartOptions: { indexAxis: 'y', plugins: { legend: { display: false } } }
+                },
+                interval: {
+                    title: '間隔尺度 (Interval Scale)',
+                    color: 'orange',
+                    description: '順序関係があり、その間隔にも意味があります。しかし、絶対的なゼロ点（無を意味する0）が存在しないため、「2倍」といった比率の比較はできません。',
+                    examples: ['摂氏温度（℃）', '西暦', '知能指数（IQ）'],
+                    chartType: 'line',
+                    chartData: {
+                        labels: ['9時', '12時', '15時', '18時', '21時'],
+                        datasets: [{
+                            label: '本日の気温（℃）',
+                            data: [15, 22, 24, 20, 17],
+                            borderColor: '#fb923c',
+                            backgroundColor: '#fed7aa',
+                            fill: true,
+                            tension: 0.1
+                        }]
+                    },
+                    chartOptions: { plugins: { legend: { position: 'top' } } }
+                },
+                ratio: {
+                    title: '比例尺度 (Ratio Scale)',
+                    color: 'red',
+                    description: '順序、間隔の意味に加え、絶対的なゼロ点が存在します。そのため、「2倍」「半分」といった比率の比較が可能で、最も多くの情報を持つ尺度です。',
+                    examples: ['身長・体重', '時間', '金額', '個数', '絶対温度(K)'],
+                    chartType: 'bar',
+                    chartData: {
+                        labels: ['A選手', 'B選手', 'C選手', 'D選手'],
+                        datasets: [{
+                            label: '身長 (cm)',
+                            data: [175, 182, 168, 190],
+                            backgroundColor: '#fca5a5'
+                        }]
+                    },
+                    chartOptions: { scales: { y: { beginAtZero: true } }, plugins: { legend: { display: false } } }
+                }
+            };
+
+            const quizData = [
+                {
+                    question: "生徒の出席番号",
+                    answer: "nominal",
+                    explanation: "出席番号は生徒を識別するための単なるラベルであり、番号の大小に数学的な意味はありません。「5番」が「1番」より優れているわけではないため、名義尺度に分類されます。"
+                },
+                {
+                    question: "あるクラスでの国語のテストの順位",
+                    answer: "ordinal",
+                    explanation: "順位には「1位 > 2位」という明確な順序関係があります。しかし、1位と2位の点数差と、2位と3位の点数差が同じとは限らないため、順序尺度となります。"
+                },
+                {
+                    question: "ある地域の今日の最高気温（摂氏）",
+                    answer: "interval",
+                    explanation: "摂氏温度は、1℃の差はどこでも同じ温度差を表しますが、0℃が「熱がない」状態を意味する絶対的なゼロ点ではありません。そのため、間隔尺度に分類されます。"
+                },
+                {
+                    question: "サッカーの試合における得点数",
+                    answer: "ratio",
+                    explanation: "得点数は、順序や間隔に意味があり、さらに「0点」は「得点がない」ことを意味する絶対的なゼロ点です。「2点」は「1点」の2倍の得点だと言えるため、比例尺度です。"
+                }
+            ];
+
+            const tabContainer = document.getElementById('tabs');
+            const contentContainer = document.getElementById('tab-content');
+            let currentChart;
+
+            function renderTabContent(scaleKey) {
+                const scale = scalesData[scaleKey];
+                if (!scale) return;
+
+                const tabButtons = document.querySelectorAll('.tab-btn');
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('tab-active', 'border-blue-500', 'border-green-500', 'border-orange-500', 'border-red-500', 'bg-blue-100', 'bg-green-100', 'bg-orange-100', 'bg-red-100', 'text-blue-800', 'text-green-800', 'text-orange-800', 'text-red-800');
+                    if (btn.dataset.tab === scaleKey) {
+                        btn.classList.add(`border-${scale.color}-500`, `bg-${scale.color}-100`, `text-${scale.color}-800`, 'font-bold');
+                    } else {
+                        btn.classList.add('border-transparent', 'hover:bg-stone-200');
+                    }
+                });
+
+                let examplesHtml = scale.examples.map(ex => `<li class="bg-${scale.color}-100 text-${scale.color}-800 rounded-full px-3 py-1 text-sm">${ex}</li>`).join('');
+
+                contentContainer.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-4 text-${scale.color}-700">${scale.title}</h3>
+                            <p class="mb-4 text-stone-600">${scale.description}</p>
+                            <h4 class="font-bold mb-2">具体例:</h4>
+                            <ul class="flex flex-wrap gap-2">${examplesHtml}</ul>
+                        </div>
+                        <div class="chart-container relative h-64 md:h-80 w-full max-w-lg mx-auto">
+                            <canvas id="scaleChart"></canvas>
+                        </div>
+                    </div>
+                `;
+
+                const ctx = document.getElementById('scaleChart').getContext('2d');
+                if (currentChart) {
+                    currentChart.destroy();
+                }
+                currentChart = new Chart(ctx, {
+                    type: scale.chartType,
+                    data: scale.chartData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        ...scale.chartOptions
+                    }
+                });
+            }
+
+            tabContainer.addEventListener('click', (e) => {
+                if (e.target.matches('.tab-btn')) {
+                    renderTabContent(e.target.dataset.tab);
+                }
+            });
+
+            renderTabContent('nominal');
+            
+            const quizContainer = document.getElementById('quiz-container');
+            let currentQuestionIndex = 0;
+
+            function renderQuiz() {
+                const quiz = quizData[currentQuestionIndex];
+                quizContainer.innerHTML = `
+                    <p class="text-lg font-semibold mb-1">問題 ${currentQuestionIndex + 1}/${quizData.length}</p>
+                    <p class="text-2xl font-bold mb-6 text-center">「${quiz.question}」はどの尺度水準？</p>
+                    <div id="quiz-options" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <button data-answer="nominal" class="quiz-option p-4 rounded-lg bg-blue-500 text-white font-bold hover:bg-blue-600 transition">名義尺度</button>
+                        <button data-answer="ordinal" class="quiz-option p-4 rounded-lg bg-green-500 text-white font-bold hover:bg-green-600 transition">順序尺度</button>
+                        <button data-answer="interval" class="quiz-option p-4 rounded-lg bg-orange-500 text-white font-bold hover:bg-orange-600 transition">間隔尺度</button>
+                        <button data-answer="ratio" class="quiz-option p-4 rounded-lg bg-red-500 text-white font-bold hover:bg-red-600 transition">比例尺度</button>
+                    </div>
+                    <div id="quiz-feedback" class="quiz-feedback opacity-0 p-4 rounded-lg min-h-[100px]"></div>
+                `;
+            }
+
+            quizContainer.addEventListener('click', (e) => {
+                if (e.target.matches('.quiz-option')) {
+                    const selectedAnswer = e.target.dataset.answer;
+                    const correctAnswer = quizData[currentQuestionIndex].answer;
+                    const feedbackEl = document.getElementById('quiz-feedback');
+                    const options = document.querySelectorAll('.quiz-option');
+
+                    options.forEach(opt => opt.disabled = true);
+
+                    if(selectedAnswer === correctAnswer) {
+                        feedbackEl.innerHTML = `<h4 class="font-bold text-xl text-green-600">正解！</h4><p>${quizData[currentQuestionIndex].explanation}</p>`;
+                        feedbackEl.classList.add('bg-green-100');
+                    } else {
+                        feedbackEl.innerHTML = `<h4 class="font-bold text-xl text-red-600">残念！</h4><p>正解は「${scalesData[correctAnswer].title}」です。</p><p>${quizData[currentQuestionIndex].explanation}</p>`;
+                        feedbackEl.classList.add('bg-red-100');
+                    }
+                    feedbackEl.classList.remove('opacity-0');
+
+                    currentQuestionIndex++;
+                    if (currentQuestionIndex < quizData.length) {
+                         feedbackEl.innerHTML += `<button id="next-quiz" class="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">次の問題へ</button>`;
+                    } else {
+                         feedbackEl.innerHTML += `<button id="restart-quiz" class="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">もう一度挑戦する</button>`;
+                    }
+                } else if (e.target.matches('#next-quiz')){
+                    renderQuiz();
+                } else if (e.target.matches('#restart-quiz')){
+                    currentQuestionIndex = 0;
+                    renderQuiz();
+                }
+            });
+
+            renderQuiz();
+
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

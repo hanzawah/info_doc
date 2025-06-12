@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2012年問題から学ぶ共通試験対策</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Math Formula Rendering: KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" xintegrity="sha384-n8MVd4RsNIU0KOVEMVIROPtOQ9ns4XADxa2ihMmmKZaCqaALxKNSE9i5U4vyGM4d" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" xintegrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzYCACeUdcKNTU5pbqhHmvNfM9ZNdO1rt9g" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" xintegrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+    <!-- Chosen Palette: Calm Harmony (Warm Neutrals with Muted Teal/Slate Accents) -->
+    <!-- Application Structure Plan: Reverted to a single-view application focusing on thematic, interactive learning. The booklet viewer has been removed to resolve functionality issues and streamline the user experience based on feedback. -->
+    <!-- Visualization & Content Choices:
+    - Reinstated the enhanced interactive elements for all chapters, including the base converter with process visualization, the bit slider, the RLE simulator, the tournament notation viewer, the XOR cipher, the balance simulator, and the dynamic spreadsheet. This restores the hands-on learning focus. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { font-family: 'Inter', 'Noto Sans JP', sans-serif; background-color: #FDFBF8; color: #383A3D; }
+        .nav-link { transition: all 0.2s ease-in-out; border-left: 3px solid transparent; }
+        .nav-link:hover, .nav-link.active { background-color: #F3F0EC; border-left-color: #4A5568; color: #2D3748; transform: translateX(2px); }
+        .card { background-color: #FFFFFF; border-radius: 0.75rem; border: 1px solid #EAE8E4; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05); transition: box-shadow 0.3s ease; }
+        .card:hover { box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.07); }
+        h2 { font-weight: 700; color: #2D3748; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #EAE8E4; }
+        h3 { font-weight: 500; color: #4A5568; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .interactive-input { width: 100%; padding: 0.5rem 0.75rem; border-radius: 0.5rem; border: 1px solid #D1D5DB; transition: border-color 0.2s, box-shadow 0.2s; }
+        .interactive-input:focus { outline: none; border-color: #4A5568; box-shadow: 0 0 0 2px rgba(74, 85, 104, 0.2); }
+        .kaito { background-color: #F3F0EC; border-left: 4px solid #4A5568; padding: 1rem; margin-top: 1.5rem; border-radius: 0.5rem; }
+        .kaito-title { font-weight: bold; color: #2D3748; }
+        code.inline-code { background-color: #EAE8E4; padding: 0.125rem 0.3rem; border-radius: 0.25rem; font-family: 'Courier New', monospace; }
+        .process-step { border-left: 2px solid #A0AEC0; padding-left: 1rem; margin-top: 0.5rem; }
+        .highlight { background-color: #FEF3C7; padding: 0.1rem 0.2rem; border-radius: 0.2rem; }
+        .tournament-node { border: 1px solid #CBD5E0; padding: 0.25rem 0.5rem; border-radius: 0.375rem; background-color: #F7FAFC; display: inline-block; margin: 0.25rem; }
+        .spreadsheet-table input { width: 100%; border: 1px solid #E2E8F0; border-radius: 0.25rem; padding: 0.25rem; text-align: right; background-color: #F7FAFC; }
+        .spreadsheet-table input.readonly { background-color: #EFF6FF; font-weight: 500; }
+        .spreadsheet-table th { background-color: #EDF2F7; }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="flex flex-col md:flex-row min-h-screen">
+        <aside class="w-full md:w-64 bg-white border-r border-gray-200 flex-shrink-0">
+            <div class="p-4 sticky top-0">
+                <h1 class="text-xl font-bold text-gray-800">情報Ⅰ 攻略講座</h1>
+                <p class="text-sm text-gray-500 mb-4">2012年 情報関係基礎</p>
+                <nav id="main-nav">
+                    <ul>
+                        <li><a href="#intro" class="nav-link active block p-2 rounded-md">イントロダクション</a></li>
+                        <li><a href="#digital-representation" class="nav-link block p-2 rounded-md">第1章: 情報の表現</a></li>
+                        <li><a href="#data-structure" class="nav-link block p-2 rounded-md">第2章: 情報の構造化</a></li>
+                        <li><a href="#security" class="nav-link block p-2 rounded-md">第3章: 情報セキュリティの初歩</a></li>
+                        <li><a href="#algorithmic-thinking" class="nav-link block p-2 rounded-md">第4章: アルゴリズム的思考</a></li>
+                        <li><a href="#spreadsheet" class="nav-link block p-2 rounded-md">第5章: 実践的データ活用</a></li>
+                        <li><a href="#summary" class="nav-link block p-2 rounded-md">まとめ: 次の共通試験へ向けて</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <main class="flex-1 p-4 sm:p-6 md:p-8">
+            <div id="content-container">
+
+                <section id="intro" class="content-section space-y-6">
+                    <h2 class="text-2xl">ようこそ、情報科学の世界へ</h2>
+                    <p>このウェブアプリケーションは、2012年度の大学入試センター試験「情報関係基礎」を題材に、大学入学共通テスト「情報Ⅰ」で問われる核心的な知識を対話的に学ぶための学習支援ツールです。静的な問題用紙から一歩進み、動的なシミュレータやコンバータを通じて、情報科学の原理を体感的に理解することを目指します。</p>
+                    <p>左のナビゲーションから学習したいテーマを選んでください。各章では、試験問題の背景にある重要な概念を解説し、インタラクティブなツールで知識の定着を図ります。単なる暗記ではなく、「なぜそうなるのか」を理解し、応用力を身につけていきましょう。</p>
+                </section>
+
+                <section id="digital-representation" class="content-section space-y-6 hidden">
+                    <h2 class="text-2xl">第1章: 情報の表現</h2>
+                    <p>コンピュータは、あらゆる情報を「0」と「1」の組み合わせで扱います。この章では、数値や文字がどのようにディジタルデータに変換され、その量がどう計算されるのか、情報科学の最も基本的な原理をインタラクティブに探求します。</p>
+                    <div class="card p-6">
+                        <h3>基数変換プロセス・ビューア (問1 a,b,c)</h3>
+                        <p class="text-sm text-gray-600 mb-4">数値を入力すると、他の進数に変換されるだけでなく、その計算プロセスがステップ・バイ・ステップで表示されます。</p>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div><label for="dec-input" class="font-medium text-sm">10進数</label><input type="number" id="dec-input" class="interactive-input" placeholder="例: 292"></div>
+                            <div><label for="bin-input" class="font-medium text-sm">2進数</label><input type="text" id="bin-input" class="interactive-input" placeholder="例: 100100100"></div>
+                        </div>
+                        <div id="conversion-process" class="mt-4 p-4 bg-gray-50 rounded-lg text-sm space-y-2 hidden"></div>
+                        <div class="kaito">
+                            <p><span class="kaito-title">問1aの解答:</span> 16進法の $124_{16}$ は、ツールで10進数に変換すると <span class="font-bold">292</span> となります。</p>
+                            <p><span class="kaito-title">問1bの解答:</span> 10進法の $213$ は、2進数で $11010101_2$ となり、<span class="font-bold">8</span>桁必要です。</p>
+                            <p><span class="kaito-title">問1cの解答:</span> 6桁の2進数で「1が3個、0が3個」からなる最大の数は $111000_2$ です。これを16進数に変換すると $38_{16}$ となります。（選択肢②）</p>
+                        </div>
+                    </div>
+                    <div class="card p-6">
+                        <h3>必要ビット数と情報量 (問1 d)</h3>
+                        <p class="text-sm text-gray-600 mb-4">スライダーを動かして、1ビット増えるごとに表現できる情報量が爆発的に増える様子を体感してください。</p>
+                        <div>
+                            <label for="bit-slider" class="font-medium text-sm">ビット数: <span id="bit-slider-value" class="font-bold">6</span></label>
+                            <input type="range" id="bit-slider" min="1" max="16" value="6" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        </div>
+                        <div id="bit-calc-result" class="mt-4 p-4 bg-blue-50 text-blue-800 rounded-md text-center"></div>
+                        <div class="kaito">
+                             <p><span class="kaito-title">問1dの解答:</span> 大文字26 + 小文字26 + 数字10 = 62種類の情報を区別するには、$2^5=32$ では足りず、$2^6=64$ で初めて足ります。よって少なくとも<span class="font-bold">6</span>ビット必要です。</p>
+                        </div>
+                    </div>
+                    <div class="card p-6">
+                        <h3>データ圧縮シミュレータ</h3>
+                        <p class="text-sm text-gray-600 mb-4">可逆圧縮の一例として、ランレングス符号化を試してみましょう。同じ文字が連続する場合、その文字と連続回数で表現します。</p>
+                        <div>
+                            <label for="rle-input" class="font-medium text-sm">圧縮したい文字列</label>
+                            <input type="text" id="rle-input" class="interactive-input" value="AAAAABBBBBCCCCCCCDDEEE">
+                        </div>
+                        <div class="mt-4">
+                            <p>元の長さ: <span id="rle-original-len" class="font-mono"></span></p>
+                            <p>圧縮後: <code id="rle-compressed" class="inline-code"></code></p>
+                            <p>圧縮後の長さ: <span id="rle-compressed-len" class="font-mono"></span></p>
+                            <p>圧縮率: <span id="rle-ratio" class="font-mono font-bold"></span></p>
+                        </div>
+                        <div class="kaito">
+                             <p><span class="kaito-title">問1 サ,シ,ス,セ,ソの解答:</span><br>
+                                 非可逆圧縮は元に戻らない代わりに圧縮率が高いのが特徴で、<span class="font-bold">音声(MP3)</span>や<span class="font-bold">画像(JPEG)</span>に使われます。一方、可逆圧縮は完全に元に戻せるのが特徴で、<span class="font-bold">プログラムや文書(ZIP)</span>などに使われます。
+                             </p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="data-structure" class="content-section space-y-6 hidden">
+                    <h2 class="text-2xl">第2章: 情報の構造化</h2>
+                    <p>この章ではトーナメント表を例に、木構造というデータ構造と、それを文字列で表現する様々な「記法」について学びます。</p>
+                    <div class="card p-6">
+                        <h3>トーナメント記法ビューア (問2)</h3>
+                        <p class="text-sm text-gray-600 mb-4">下のトーナメント図をクリックすると、対応する各記法が表示されます。</p>
+                        <div class="grid md:grid-cols-2 gap-8 text-center">
+                            <div>
+                                <h4 class="font-medium mb-2">T1</h4>
+                                <div id="tourney-t1" class="cursor-pointer p-4 border-2 border-transparent hover:border-blue-300 rounded-lg"><div class="tournament-node">((A×B)×C)×D</div></div>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-2">T2</h4>
+                                <div id="tourney-t2" class="cursor-pointer p-4 border-2 border-transparent hover:border-blue-300 rounded-lg"><div class="tournament-node">A×(B×(C×D))</div></div>
+                            </div>
+                        </div>
+                        <div id="notation-display" class="mt-4 space-y-2 hidden">
+                            <div><span class="font-bold">記法1 (中置記法):</span> <code id="notation-1" class="inline-code"></code></div>
+                            <div><span class="font-bold">記法2 (後置記法):</span> <code id="notation-2" class="inline-code"></code></div>
+                            <div><span class="font-bold">記法3 (末尾*削除):</span> <code id="notation-3" class="inline-code"></code></div>
+                        </div>
+                        <div class="kaito">
+                             <p><span class="kaito-title">問2の解答 (抜粋):</span><br>
+                                 ア: T1の記法1は <code class="inline-code">(((A×B)×C)×D)</code> (①)。<br>
+                                 イ: T2の記法1は <code class="inline-code">(A×(B×(C×D)))</code> (⑤)。<br>
+                                 キ: <code class="inline-code">((A×B)×(C×D))</code> は記法2で <code class="inline-code">AB*CD**</code> となり7文字。
+                             </p>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="security" class="content-section space-y-6 hidden">
+                    <h2 class="text-2xl">第3章: 情報セキュリティの初歩</h2>
+                    <p>排他的論理和(XOR)を用いた簡単な暗号の仕組みを解き明かし、その性質と、使い方を誤った場合の危険性について考察します。</p>
+                    <div class="card p-6">
+                        <h3>XOR暗号シミュレータ (問3)</h3>
+                        <p class="text-sm text-gray-600 mb-4">メッセージ($M$)と鍵($K$)のビット(0か1)を入力して、暗号化・復号のプロセスを体験しましょう。</p>
+                        <div class="grid md:grid-cols-2 gap-6 items-start">
+                            <div>
+                                <h4 class="font-medium mb-2">暗号化 (送信者)</h4>
+                                <div class="flex items-center space-x-2">
+                                    <input type="number" id="xor-m" min="0" max="1" value="1" class="interactive-input w-16 text-center">
+                                    <span class="text-xl font-bold">⊕</span>
+                                    <input type="number" id="xor-k" min="0" max="1" value="1" class="interactive-input w-16 text-center">
+                                    <span class="text-xl font-bold">=</span>
+                                    <span id="xor-c" class="text-2xl font-bold w-16 text-center">?</span>
+                                </div>
+                                <div class="text-xs text-center">(メッセージ $M$) ⊕ (鍵 $K$) = (暗号文 $C$)</div>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-2">復号 (受信者)</h4>
+                                 <div class="flex items-center space-x-2">
+                                    <span id="xor-c-dec" class="text-2xl font-bold w-16 text-center">?</span>
+                                    <span class="text-xl font-bold">⊕</span>
+                                    <span id="xor-k-dec" class="text-2xl font-bold w-16 text-center">?</span>
+                                    <span class="text-xl font-bold">=</span>
+                                    <span id="xor-m-dec" class="text-2xl font-bold w-16 text-center">?</span>
+                                </div>
+                                <div class="text-xs text-center">(暗号文 $C$) ⊕ (鍵 $K$) = (メッセージ $M$)</div>
+                            </div>
+                        </div>
+                        <div class="kaito">
+                            <p><span class="kaito-title">問3の解答 (抜粋):</span><br>
+                                チ: $M=0, K=0$ のとき、$C = 0 \oplus 0 = 0$。<br>
+                                ナ: 同じ鍵を再利用すると、暗号文$C$と$C'$が等しいか否かで、元のメッセージ$M$と$M'$が等しいか否かが分かってしまいます。
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="algorithmic-thinking" class="content-section space-y-6 hidden">
+                    <h2 class="text-2xl">第4章: アルゴリズム的思考</h2>
+                    <p>天秤と分銅の問題を通して、ある問題を解決する「手順」を論理的に組み立てる思考法を学びます。</p>
+                    <div class="card p-6">
+                        <h3>天秤シミュレータ (第3問)</h3>
+                        <p class="text-sm text-gray-600 mb-4">測定したい物体の質量を入力し、各ルールでどのように分銅を配置すれば釣り合うかを見てみましょう。</p>
+                        <label for="weight-input" class="font-medium text-sm">測定したい質量 (1〜1023)</label>
+                        <input type="number" id="weight-input" class="interactive-input mt-1" value="713">
+                        <div class="grid md:grid-cols-2 gap-6 mt-6">
+                            <div class="border p-4 rounded-lg">
+                                <h4 class="font-bold text-lg mb-2">ルール1: $2^n$分銅 (右皿のみ)</h4>
+                                <p class="text-xs text-gray-500 mb-2">これは質量の<span class="font-bold">2進数表現</span>そのものです。</p>
+                                <div id="balance-binary-result" class="text-sm space-y-1"></div>
+                            </div>
+                            <div class="border p-4 rounded-lg">
+                                <h4 class="font-bold text-lg mb-2">ルール2: $3^n$分銅 (両皿OK)</h4>
+                                <p class="text-xs text-gray-500 mb-2">これは<span class="font-bold">平衡3進法</span>の考え方です。</p>
+                                <div id="balance-ternary-result" class="text-sm space-y-1"></div>
+                            </div>
+                        </div>
+                         <div class="kaito mt-6">
+                            <p><span class="kaito-title">第3問の解答 (抜粋):</span><br>
+                               ルール1は、与えられた質量を2進数に変換し、'1'が立つ桁に対応する分銅を使います。<br>
+                               ルール2は、平衡3進法の考え方を応用し、余りが2の場合は次の桁に1を加えて現在の桁をマイナスとして扱います。
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="spreadsheet" class="content-section space-y-6 hidden">
+                     <h2 class="text-2xl">第5章: 実践的データ活用</h2>
+                    <p>表計算ソフトを使い、テーマパークの計画立案という現実的なシナリオを通じて、複雑な条件を処理し、最適な計画を導き出す方法を学びます。</p>
+                    <div class="card p-6">
+                        <h3>インタラクティブ計画表 (第4問)</h3>
+                        <p class="text-sm text-gray-600 mb-4">アトラクションの順番やEパス利用の有無、待ち時間を変更して計画がどう変わるかシミュレーションできます。（このデモは簡略版です）</p>
+                        <div class="overflow-x-auto">
+                            <table id="park-spreadsheet" class="w-full text-sm text-left spreadsheet-table">
+                                <thead class="text-xs uppercase">
+                                    <tr><th>A:名称</th><th>B:種類</th><th>C:所要</th><th>D:待ち</th><th>E:並び始め(時)</th><th>F:(分)</th><th>G:終了(時)</th><th>H:(分)</th></tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div class="kaito mt-6">
+                             <p><span class="kaito-title">第4問の解答 (抜粋):</span><br>
+                                G3(終了時)の式: <code class="inline-code">INT(E3+(C3+D3+F3)/60)</code> (⓪)<br>
+                                H3(終了分)の式: <code class="inline-code">MOD(C3+D3+F3,60)</code> (④)<br>
+                                このように、前の行の結果を使い、INT関数とMOD関数を駆使して逐次的に時間を計算していきます。
+                            </p>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="summary" class="content-section space-y-6 hidden">
+                    <h2 class="text-2xl">まとめ: 次の共通試験へ向けて</h2>
+                    <p>この講義で扱った2012年の問題は、現在の大学入学共通テスト「情報Ⅰ」においても変わることなく重要な、情報科学の普遍的な原理を内包しています。</p>
+                    <div class="card p-6">
+                        <h3>時代を超える普遍的な知識</h3>
+                        <ul class="list-disc list-inside mt-4 space-y-2 text-gray-800">
+                            <li><span class="font-bold text-slate-700">情報のディジタル表現:</span> 2進数やデータ量はコンピュータの基礎です。</li>
+                            <li><span class="font-bold text-slate-700">データの構造化:</span> 階層構造の理解は効率的なプログラミングに不可欠です。</li>
+                            <li><span class="font-bold text-slate-700">セキュリティの原理:</span> 暗号の仕組みと鍵の重要性は、安全な情報社会の根幹です。</li>
+                            <li><span class="font-bold text-slate-700">アルゴリズム的思考:</span> 手順の論理的な構築力は、プログラミング的思考力そのものです。</li>
+                            <li><span class="font-bold text-slate-700">モデル化とシミュレーション:</span> 現実の問題を表計算ソフトなどでモデル化し、解決策を探る能力は、問題発見・解決能力に直結します。</li>
+                        </ul>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // KaTeX auto-rendering
+    const renderContent = () => {
+        if (window.renderMathInElement) {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "$", right: "$", display: false}
+                ]
+            });
+        }
+    };
+    renderContent();
+
+    // Navigation
+    const navLinks = document.querySelectorAll('#main-nav .nav-link');
+    const contentSections = document.querySelectorAll('.content-section');
+    const navigateToSection = (hash) => {
+        navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === hash));
+        contentSections.forEach(section => section.classList.toggle('hidden', `#${section.id}` !== hash));
+        window.scrollTo(0, 0);
+        renderContent();
+    };
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            navigateToSection(e.currentTarget.getAttribute('href'));
+        });
+    });
+    navigateToSection('#intro');
+    
+    // --- Chapter 1 Scripts ---
+    const decInput = document.getElementById('dec-input');
+    const binInput = document.getElementById('bin-input');
+    const conversionProcess = document.getElementById('conversion-process');
+    const updateConverters = (source) => {
+        let decValue = 0; let processHtml = '';
+        if (source === 'dec') { decValue = parseInt(decInput.value, 10); }
+        else if (source === 'bin') {
+            const binStr = binInput.value.replace(/[^01]/g, '');
+            binInput.value = binStr;
+            decValue = parseInt(binStr, 2);
+        }
+        if (isNaN(decValue) || decValue < 0) {
+            if (source !== 'dec') decInput.value = ''; if (source !== 'bin') binInput.value = '';
+            conversionProcess.classList.add('hidden'); return;
+        }
+        if (source !== 'dec') decInput.value = decValue;
+        if (source !== 'bin') binInput.value = decValue.toString(2);
+        if (source === 'dec' && decInput.value.length > 0) {
+            processHtml += '<h4>10進数 → 2進数 変換プロセス</h4>';
+            let tempDec = decValue; let binResult = '';
+            if (tempDec === 0) {
+                 processHtml += '<div class="process-step">0 ÷ 2 = 商 0, 余り <span class="highlight">0</span></div>'; binResult = '0';
+            } else {
+                while (tempDec > 0) {
+                    let remainder = tempDec % 2;
+                    processHtml += `<div class="process-step">${tempDec} ÷ 2 = 商 ${Math.floor(tempDec / 2)}, 余り <span class="highlight">${remainder}</span></div>`;
+                    binResult = remainder + binResult; tempDec = Math.floor(tempDec / 2);
+                }
+            }
+            processHtml += `<p class="mt-2">余りを下から上に読むと、2進数表現は <code class="inline-code">${binResult}</code> となります。</p>`;
+        } else if (source === 'bin' && binInput.value.length > 0) {
+            processHtml += '<h4>2進数 → 10進数 変換プロセス</h4>';
+            const binStr = binInput.value; let sum = 0; let terms = [];
+            for (let i = 0; i < binStr.length; i++) {
+                const digit = parseInt(binStr[binStr.length - 1 - i], 2);
+                if (digit === 1) { const power = 2**i; terms.unshift(`(1 × 2<sup>${i}</sup>)`); sum += power; }
+            }
+            processHtml += `<p>${terms.join(' + ')} = <span class="highlight">${sum}</span></p>`;
+            processHtml += `<p class="mt-2">よって、10進数表現は <code class="inline-code">${sum}</code> となります。</p>`;
+        }
+        if (processHtml) { conversionProcess.innerHTML = processHtml; conversionProcess.classList.remove('hidden'); }
+        else { conversionProcess.classList.add('hidden'); }
+    };
+    if(decInput) { decInput.addEventListener('input', () => updateConverters('dec')); }
+    if(binInput) { binInput.addEventListener('input', () => updateConverters('bin')); }
+
+    const bitSlider = document.getElementById('bit-slider');
+    const bitSliderValue = document.getElementById('bit-slider-value');
+    const bitCalcResult = document.getElementById('bit-calc-result');
+    const updateBitCalc = () => {
+        const bits = parseInt(bitSlider.value, 10);
+        bitSliderValue.textContent = bits;
+        const combinations = BigInt(2) ** BigInt(bits);
+        bitCalcResult.innerHTML = `<span class="font-bold">${bits}</span> ビットで表現できる情報の種類は...<br><span class="text-2xl font-bold text-blue-900">${combinations.toLocaleString()}</span> 通り`;
+    };
+    if(bitSlider) { bitSlider.addEventListener('input', updateBitCalc); updateBitCalc(); }
+
+    const rleInput = document.getElementById('rle-input');
+    const rleOriginalLen = document.getElementById('rle-original-len');
+    const rleCompressed = document.getElementById('rle-compressed');
+    const rleCompressedLen = document.getElementById('rle-compressed-len');
+    const rleRatio = document.getElementById('rle-ratio');
+    const updateRLE = () => {
+        const input = rleInput.value;
+        if (!input) { rleOriginalLen.textContent = '0'; rleCompressed.textContent = ''; rleCompressedLen.textContent = '0'; rleRatio.textContent = 'N/A'; return; }
+        let compressed = ''; let count = 1;
+        for (let i = 0; i < input.length; i++) {
+            if (input[i] === input[i+1]) { count++; }
+            else { compressed += input[i] + count; count = 1; }
+        }
+        const originalLength = input.length; const compressedLength = compressed.length;
+        const ratio = originalLength > 0 ? (100 * compressedLength / originalLength).toFixed(1) + '%' : 'N/A';
+        rleOriginalLen.textContent = originalLength; rleCompressed.textContent = compressed;
+        rleCompressedLen.textContent = compressedLength; rleRatio.textContent = ratio;
+    };
+    if(rleInput) { rleInput.addEventListener('input', updateRLE); updateRLE(); }
+
+    // --- Chapter 2 Scripts ---
+    const tourneyT1 = document.getElementById('tourney-t1');
+    const tourneyT2 = document.getElementById('tourney-t2');
+    const notationDisplay = document.getElementById('notation-display');
+    const showNotations = (type) => {
+        if (type === 'T1') {
+            document.getElementById('notation-1').textContent = '(((A×B)×C)×D)';
+            document.getElementById('notation-2').textContent = 'AB*C*D*';
+            document.getElementById('notation-3').textContent = 'AB*C*D';
+            tourneyT1.classList.add('border-blue-300'); tourneyT2.classList.remove('border-blue-300');
+        } else if (type === 'T2') {
+            document.getElementById('notation-1').textContent = '(A×(B×(C×D)))';
+            document.getElementById('notation-2').textContent = 'ABCD***';
+            document.getElementById('notation-3').textContent = 'ABCD';
+            tourneyT2.classList.add('border-blue-300'); tourneyT1.classList.remove('border-blue-300');
+        }
+        notationDisplay.classList.remove('hidden');
+    };
+    if(tourneyT1) { tourneyT1.addEventListener('click', () => showNotations('T1')); }
+    if(tourneyT2) { tourneyT2.addEventListener('click', () => showNotations('T2')); }
+
+    // --- Chapter 3 Scripts ---
+    const xorM = document.getElementById('xor-m');
+    const xorK = document.getElementById('xor-k');
+    const xorC = document.getElementById('xor-c');
+    const xorCDec = document.getElementById('xor-c-dec');
+    const xorKDec = document.getElementById('xor-k-dec');
+    const xorMDec = document.getElementById('xor-m-dec');
+    const updateXorCipher = () => {
+        const m = parseInt(xorM.value, 10); const k = parseInt(xorK.value, 10);
+        if (isNaN(m) || isNaN(k) || m < 0 || m > 1 || k < 0 || k > 1) {
+             [xorC, xorCDec, xorKDec, xorMDec].forEach(el => el.textContent = '?'); return;
+        }
+        const c = m ^ k; xorC.textContent = c; xorCDec.textContent = c; xorKDec.textContent = k; xorMDec.textContent = c ^ k;
+    };
+    if(xorM) { xorM.addEventListener('input', updateXorCipher); }
+    if(xorK) { xorK.addEventListener('input', updateXorCipher); updateXorCipher(); }
+
+    // --- Chapter 4 Scripts ---
+    const weightInput = document.getElementById('weight-input');
+    const balanceBinaryResult = document.getElementById('balance-binary-result');
+    const balanceTernaryResult = document.getElementById('balance-ternary-result');
+    const updateBalances = () => {
+        let x = parseInt(weightInput.value, 10);
+        if (isNaN(x) || x < 1) { balanceBinaryResult.innerHTML = '<p>有効な質量を入力してください。</p>'; balanceTernaryResult.innerHTML = '<p>有効な質量を入力してください。</p>'; return; }
+        let tempX_bin = x; let binHtml = '<ul>';
+        for (let i = 9; i >= 0; i--) {
+            const weight = 2**i;
+            if (tempX_bin >= weight) { binHtml += `<li><span class="font-bold text-green-700">✓</span> 右皿に ${weight}g (${i}番) の分銅を置く</li>`; tempX_bin -= weight; }
+        }
+        binHtml += '</ul>'; balanceBinaryResult.innerHTML = binHtml;
+        let tempX_ter = x; let terResults = []; let i_ter = 0;
+        while (tempX_ter > 0) {
+            const remainder = tempX_ter % 3; tempX_ter = Math.floor(tempX_ter / 3);
+            if (remainder === 1) { terResults.push({ side: 'right', weight: 3**i_ter, index: i_ter }); }
+            else if (remainder === 2) { terResults.push({ side: 'left', weight: 3**i_ter, index: i_ter }); tempX_ter++; }
+            i_ter++;
+        }
+        let terHtml = '<ul>';
+        if (terResults.length === 0) { terHtml += '<li>分銅は不要です。</li>'; }
+        else { terResults.reverse().forEach(r => {
+            if (r.side === 'right') { terHtml += `<li><span class="font-bold text-blue-700">✓</span> 右皿に ${r.weight}g (${r.index}番) の分銅を置く</li>`; }
+            else { terHtml += `<li><span class="font-bold text-red-700">✓</span> 左皿に ${r.weight}g (${r.index}番) の分銅を置く</li>`; } });
+        }
+        terHtml += '</ul>'; balanceTernaryResult.innerHTML = terHtml;
+    };
+    if(weightInput) { weightInput.addEventListener('input', updateBalances); updateBalances(); }
+
+    // --- Chapter 5 Scripts ---
+    const spreadsheetBody = document.querySelector('#park-spreadsheet tbody');
+    const updateSpreadsheet = () => {
+        const plan = [ {name:'R1',type:'ライド',dur:5,wait:60}, {name:'R2',type:'ライド',dur:4,wait:60}, {name:'昼食',type:'食事',dur:40,wait:30}, {name:'R3',type:'ライド',dur:6,wait:20} ];
+        let lastEndTimeH = 10; let lastEndTimeM = 10;
+        let tableHtml = '';
+        plan.forEach(item => {
+            const startH = lastEndTimeH; const startM = lastEndTimeM;
+            const totalMinutes = item.dur + item.wait + startM;
+            const endH = startH + Math.floor(totalMinutes / 60); const endM = totalMinutes % 60;
+            tableHtml += `<tr><td class="p-1"><input type="text" value="${item.name}" class="readonly" readonly></td><td class="p-1"><input type="text" value="${item.type}" class="readonly" readonly></td><td class="p-1"><input type="text" value="${item.dur}" class="readonly" readonly></td><td class="p-1"><input type="text" value="${item.wait}" class="readonly" readonly></td><td class="p-1"><input type="text" value="${startH}" class="readonly" readonly></td><td class="p-1"><input type="text" value="${startM}" class="readonly" readonly></td><td class="p-1"><input type="text" value="${endH}" class="readonly" readonly></td><td class="p-1"><input type="text" value="${endM}" class="readonly" readonly></td></tr>`;
+            lastEndTimeH = endH + Math.floor((endM + 10) / 60); lastEndTimeM = (endM + 10) % 60;
+        });
+        spreadsheetBody.innerHTML = tableHtml;
+    };
+    if(spreadsheetBody) { updateSpreadsheet(); }
+
+});
+</script>
+</body>
+</html>
