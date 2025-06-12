@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大学入試対策：対話型でマスターする対称式</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral (Stone/Amber) with a Blue/Green Accent -->
+    <!-- Application Structure Plan: A tab-based navigation UI. The user can switch between 'Problem Overview', 'Step-by-Step Solution', 'Interactive Tool', and 'Advanced Study'. This structure allows users, especially exam-focused students, to quickly access the section relevant to their immediate goal (e.g., check the solution, explore a concept, or tackle advanced problems), making the app a more efficient study tool. -->
+    <!-- Visualization & Content Choices: 1. Step-by-step solutions: Goal=Inform, Method=HTML text blocks, Interaction=JS show/hide buttons for self-testing. 2. 0<x<1 condition: Goal=Explore/Explain, Method=Interactive module (HTML slider + dynamic text + Chart.js bar chart), Interaction=Real-time updates on slider drag, Justification=Visually proves why x - 1/x is negative. 3. Advanced Study section added to show application to higher-order problems (x^3+1/x^3), targeting advanced high school students. Library=Chart.js for all charts. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans JP', 'Inter', sans-serif;
+            background-color: #f5f5f4; /* stone-100 */
+            color: #3f3f46;
+        }
+        .latex { font-family: 'Times New Roman', serif; font-style: italic; }
+        .tab-button {
+            transition: all 0.3s ease;
+        }
+        .tab-button.active {
+            border-color: #059669; /* emerald-600 */
+            background-color: #ffffff;
+            color: #047857; /* emerald-700 */
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .step-card {
+            transition: all 0.3s ease-in-out;
+            border: 1px solid #e7e5e4;
+        }
+        .solution {
+            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        .solution.show {
+            max-height: 500px;
+            opacity: 1;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-stone-100">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-5xl">
+
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-stone-800 mb-2">大学入試対策：対話型でマスターする対称式</h1>
+            <p class="text-stone-600">基本から応用まで、タブを切り替えて効率的に学習しよう。</p>
+        </header>
+
+        <!-- メインページへのリンクを追加 -->
+        <div class="text-center mb-4">
+            <a href="../index.html" class="text-blue-500 hover:underline">← メインページへ戻る</a>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div id="tab-nav" class="mb-8 flex flex-wrap justify-center border-b border-stone-300">
+            <button onclick="changeTab(event, 'problem')" class="tab-button active text-stone-600 font-semibold py-3 px-4 md:px-6 border-b-4 border-transparent">問題の概要</button>
+            <button onclick="changeTab(event, 'solution')" class="tab-button text-stone-600 font-semibold py-3 px-4 md:px-6 border-b-4 border-transparent">ステップ解説</button>
+            <button onclick="changeTab(event, 'interactive')" class="tab-button text-stone-600 font-semibold py-3 px-4 md:px-6 border-b-4 border-transparent">対話ツールで学ぶ</button>
+            <button onclick="changeTab(event, 'advanced')" class="tab-button text-stone-600 font-semibold py-3 px-4 md:px-6 border-b-4 border-transparent">発展学習</button>
+        </div>
+
+        <main id="tab-content-container">
+            <!-- Tab 1: Problem Overview -->
+            <div id="problem" class="tab-content active">
+                <section class="mb-12 bg-white p-6 rounded-2xl shadow-md border border-stone-200">
+                    <h2 class="text-2xl font-bold text-emerald-700 mb-4">今回の問題</h2>
+                    <div class="text-lg space-y-3">
+                        <p><span class="latex">x<sup>2</sup> + 1/x<sup>2</sup> = 5</span> の時、次の値を求めよ。（ただし <span class="latex">0 &lt; x &lt; 1</span>）</p>
+                        <ol class="list-decimal list-inside pl-4 mt-4 space-y-2">
+                            <li>(<span class="latex">x</span> + 1/<span class="latex">x</span>)<sup>2</sup></li>
+                            <li>(<span class="latex">x</span> - 1/<span class="latex">x</span>)<sup>2</sup></li>
+                            <li><span class="latex">x</span> - 1/<span class="latex">x</span></li>
+                            <li><span class="latex">x</span></li>
+                        </ol>
+                    </div>
+                </section>
+                <section class="bg-emerald-50 p-6 rounded-2xl border border-emerald-200">
+                    <h2 class="text-2xl font-bold text-emerald-800 mb-4">突破口となる基本の考え方</h2>
+                    <p class="mb-4">この問題の鍵は、中学校で学んだ展開公式を逆に使うことです。与えられた式と求めたい式の関係性を見抜きましょう。</p>
+                    <div class="grid md:grid-cols-2 gap-4 text-center">
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="font-semibold text-stone-700">(<span class="latex">x</span> + 1/<span class="latex">x</span>)<sup>2</sup> = <span class="latex">x</span><sup>2</sup> + 2 + 1/<span class="latex">x</span><sup>2</sup></p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="font-semibold text-stone-700">(<span class="latex">x</span> - 1/<span class="latex">x</span>)<sup>2</sup> = <span class="latex">x</span><sup>2</sup> - 2 + 1/<span class="latex">x</span><sup>2</sup></p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Tab 2: Step-by-Step Solution -->
+            <div id="solution" class="tab-content">
+                <section class="space-y-4">
+                    <div class="step-card bg-white rounded-xl shadow-md">
+                        <button onclick="toggleSolution('solution1')" class="w-full text-left p-5 flex justify-between items-center"><span class="text-lg font-semibold text-stone-700">① (<span class="latex">x</span> + 1/<span class="latex">x</span>)<sup>2</sup> の値を求める</span><span class="text-emerald-600 font-bold text-2xl transform transition-transform duration-300">&plus;</span></button>
+                        <div id="solution1" class="solution px-5 pb-5"><p class="mb-2">基本の考え方から、(<span class="latex">x</span> + 1/<span class="latex">x</span>)<sup>2</sup> = (<span class="latex">x</span><sup>2</sup> + 1/<span class="latex">x</span><sup>2</sup>) + 2 となります。条件を代入すると…</p><p class="text-xl font-bold text-emerald-700 mt-2 bg-emerald-50 p-3 rounded-lg inline-block">5 + 2 = 7</p></div>
+                    </div>
+                    <div class="step-card bg-white rounded-xl shadow-md">
+                        <button onclick="toggleSolution('solution2')" class="w-full text-left p-5 flex justify-between items-center"><span class="text-lg font-semibold text-stone-700">② (<span class="latex">x</span> - 1/<span class="latex">x</span>)<sup>2</sup> の値を求める</span><span class="text-emerald-600 font-bold text-2xl transform transition-transform duration-300">&plus;</span></button>
+                        <div id="solution2" class="solution px-5 pb-5"><p class="mb-2">同様に、(<span class="latex">x</span> - 1/<span class="latex">x</span>)<sup>2</sup> = (<span class="latex">x</span><sup>2</sup> + 1/<span class="latex">x</span><sup>2</sup>) - 2 となります。条件を代入すると…</p><p class="text-xl font-bold text-emerald-700 mt-2 bg-emerald-50 p-3 rounded-lg inline-block">5 - 2 = 3</p></div>
+                    </div>
+                    <div class="step-card bg-white rounded-xl shadow-md">
+                        <button onclick="toggleSolution('solution3')" class="w-full text-left p-5 flex justify-between items-center"><span class="text-lg font-semibold text-stone-700">③ <span class="latex">x</span> - 1/<span class="latex">x</span> の値を求める</span><span class="text-emerald-600 font-bold text-2xl transform transition-transform duration-300">&plus;</span></button>
+                        <div id="solution3" class="solution px-5 pb-5"><p class="mb-2">②の結果から、(<span class="latex">x</span> - 1/<span class="latex">x</span>)<sup>2</sup> = 3 なので <span class="latex">x</span> - 1/<span class="latex">x</span> = &plusmn;&radic;3 です。ここで条件 <span class="latex">0 &lt; x &lt; 1</span> より、<span class="latex">x</span> は1より小さい正の数、1/<span class="latex">x</span> は1より大きい数になります。そのため、(小さい数) - (大きい数)となり、結果は<strong class="text-red-600">負の数</strong>になります。</p><p class="text-xl font-bold text-emerald-700 mt-2 bg-emerald-50 p-3 rounded-lg inline-block"><span class="latex">x</span> - 1/<span class="latex">x</span> = -&radic;3</p></div>
+                    </div>
+                    <div class="step-card bg-white rounded-xl shadow-md">
+                        <button onclick="toggleSolution('solution4')" class="w-full text-left p-5 flex justify-between items-center"><span class="text-lg font-semibold text-stone-700">④ <span class="latex">x</span> の値を求める</span><span class="text-emerald-600 font-bold text-2xl transform transition-transform duration-300">&plus;</span></button>
+                        <div id="solution4" class="solution px-5 pb-5"><p class="mb-2">③の結果 <span class="latex">x</span> - 1/<span class="latex">x</span> = -&radic;3 を <span class="latex">x</span> の方程式とみて解きます。両辺に <span class="latex">x</span> を掛けて整理すると、<span class="latex">x</span><sup>2</sup> + &radic;3<span class="latex">x</span> - 1 = 0 となります。解の公式より <span class="latex">x</span> = (-&radic;3 &plusmn; &radic;7) / 2。条件 <span class="latex">0 &lt; x &lt; 1</span> を満たすのは正の値の方だけです。</p><p class="text-xl font-bold text-emerald-700 mt-2 bg-emerald-50 p-3 rounded-lg inline-block"><span class="latex">x</span> = (-&radic;3 + &radic;7) / 2</p></div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Tab 3: Interactive Tool -->
+            <div id="interactive" class="tab-content">
+                 <section class="bg-white p-6 rounded-2xl shadow-md border border-stone-200">
+                    <h3 class="text-xl font-bold text-emerald-700 mb-4">条件 <span class="latex">0 &lt; x &lt; 1</span> を体感する</h3>
+                    <p class="mb-4">下のスライダーを動かして、<span class="latex">x</span> の値が変わると他の値がどう変化するか観察してみましょう。特に <span class="latex">x</span> と 1/<span class="latex">x</span> の大小関係、そして <span class="latex">x</span> - 1/<span class="latex">x</span> の符号に注目してください。</p>
+                    <div class="mb-6">
+                        <label for="x-slider" class="block mb-2 font-semibold"><span class="latex">x</span> の値: <span id="x-value" class="text-emerald-700 font-bold">0.50</span></label>
+                        <input type="range" id="x-slider" min="0.01" max="0.99" value="0.5" step="0.01" class="w-full">
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-6 items-center">
+                        <div class="space-y-3"><div class="bg-stone-100 p-3 rounded-lg"><p>1/<span class="latex">x</span> の値: <span id="one-over-x-value" class="font-bold text-stone-700"></span></p></div><div class="bg-red-50 border border-red-200 p-3 rounded-lg"><p><span class="latex">x</span> - 1/<span class="latex">x</span> の値: <span id="diff-value" class="font-bold text-red-700"></span></p></div></div>
+                        <div class="chart-container h-64 md:h-full"><canvas id="comparisonChart"></canvas></div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Tab 4: Advanced Study -->
+            <div id="advanced" class="tab-content">
+                <section class="bg-white p-6 rounded-2xl shadow-md border border-stone-200">
+                    <h2 class="text-2xl font-bold text-emerald-700 mb-4">入試に向けた発展学習</h2>
+                    <p class="mb-4">この問題の考え方は、より次数の高い式の値を求める問題に応用できます。これは大学入試で頻出のテーマです。</p>
+                    <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                        <h3 class="font-bold text-lg text-stone-800 mb-2">例題： <span class="latex">x</span><sup>3</sup> + 1/<span class="latex">x</span><sup>3</sup> の値を求めよ。</h3>
+                        <p class="mb-2">3乗の展開公式 <span class="latex">(a+b)<sup>3</sup> = a<sup>3</sup> + b<sup>3</sup> + 3ab(a+b)</span> を変形すると、以下の重要な関係式が得られます。</p>
+                        <p class="text-lg my-3 text-center bg-white p-3 rounded-md shadow-sm"><span class="latex">x</span><sup>3</sup> + 1/<span class="latex">x</span><sup>3</sup> = (<span class="latex">x</span> + 1/<span class="latex">x</span>)<sup>3</sup> - 3(<span class="latex">x</span> + 1/<span class="latex">x</span>)</p>
+                        <p class="mb-2">まず、<span class="latex">x</span> + 1/<span class="latex">x</span> の値を求めます。ステップ解説①で (<span class="latex">x</span> + 1/<span class="latex">x</span>)<sup>2</sup> = 7 とわかりました。<span class="latex">x</span>>0 なので <span class="latex">x</span> + 1/<span class="latex">x</span> > 0 であり、<span class="latex">x</span> + 1/<span class="latex">x</span> = &radic;7 です。</p>
+                        <p class="mb-2">この値を上の公式に代入すると…</p>
+                        <p class="text-xl font-bold text-emerald-700 mt-2 p-3 rounded-lg inline-block">(&radic;7)<sup>3</sup> - 3(&radic;7) = 7&radic;7 - 3&radic;7 = 4&radic;7</p>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let comparisonChart;
+
+        function changeTab(event, tabId) {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(button => button.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            
+            if (tabId === 'interactive' && !comparisonChart) {
+                initializeChart();
+                updateValues();
+            }
+        }
+
+        function toggleSolution(id) {
+            const solutionDiv = document.getElementById(id);
+            const button = solutionDiv.previousElementSibling;
+            const icon = button.querySelector('span:last-child');
+            
+            if (solutionDiv.classList.contains('show')) {
+                solutionDiv.classList.remove('show');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                solutionDiv.classList.add('show');
+                icon.style.transform = 'rotate(45deg)';
+            }
+        }
+
+        const slider = document.getElementById('x-slider');
+        const xValueDisplay = document.getElementById('x-value');
+        const oneOverXValueDisplay = document.getElementById('one-over-x-value');
+        const diffValueDisplay = document.getElementById('diff-value');
+        
+        function initializeChart() {
+            const ctx = document.getElementById('comparisonChart').getContext('2d');
+            comparisonChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['x', '1/x'],
+                    datasets: [{
+                        label: '値の比較', data: [0.5, 2],
+                        backgroundColor: ['rgba(16, 185, 129, 0.6)', 'rgba(244, 63, 94, 0.6)'],
+                        borderColor: ['rgba(5, 150, 105, 1)', 'rgba(225, 29, 72, 1)'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+                    plugins: { legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) { return context.dataset.label + ': ' + context.raw.toFixed(2); }
+                            }
+                        }
+                    },
+                    scales: { x: { beginAtZero: true, title: { display: true, text: '値' } } }
+                }
+            });
+        }
+        
+        function updateValues() {
+            if (!slider) return;
+            const x = parseFloat(slider.value);
+            const oneOverX = 1 / x;
+            const diff = x - oneOverX;
+
+            xValueDisplay.textContent = x.toFixed(2);
+            oneOverXValueDisplay.textContent = oneOverX.toFixed(2);
+            diffValueDisplay.textContent = diff.toFixed(2);
+            
+            if (comparisonChart) {
+                comparisonChart.data.datasets[0].data[0] = x;
+                comparisonChart.data.datasets[0].data[1] = oneOverX;
+                comparisonChart.update();
+            }
+        }
+        
+        if (slider) {
+            slider.addEventListener('input', updateValues);
+        }
+
+        // Initialize chart only if the interactive tab is active on load
+        if(document.getElementById('interactive').classList.contains('active')) {
+             initializeChart();
+             updateValues();
+        }
+
+    </script>
+</body>
+</html>
