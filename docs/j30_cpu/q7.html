@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>問7：性能指標の選択 - CPU解説</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .collapsible { background-color: #eee; color: #444; cursor: pointer; padding: 18px; width: 100%; border: none; text-align: left; outline: none; font-size: 15px; margin-bottom: 10px; border-radius: 5px; }
+        .collapsible:hover { background-color: #ddd; }
+        .content { padding: 0 18px; display: none; overflow: hidden; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="index.html" style="color: #fff; text-decoration: none;">CPUの処理能力 解説</a></h1>
+    </header>
+    <main>
+        <h2 class="question-title">問7：性能指標の選択</h2>
+
+        <button type="button" class="collapsible">▼ クリックして問題文を���示</button>
+        <div class="content">
+            <img src="images/question_q7.png" alt="問7の問題文" style="width:100%;">
+        </div>
+        
+        <div class="explanation-section">
+            <h3>ポイント解説</h3>
+            <p>
+                コンピュータの性能は、単一の指標だけでは測れません。特にスマートフォンようなモバイルデバイスでは、処理速度だけでなく、消費電力や発熱も重要な要素となります。この問題は、用途に応じた総合的な性能判断ができるかを問うています。
+            </p>
+        </div>
+
+        <div class="explanation-section">
+            <h3>トレードオフを理解する</h3>
+            <p>CPUの性能には「トレードオフ（一方を立てれば他方が立たない）」の関係が多く存在します。</p>
+            <ul>
+                <li><strong>クロック周波数:</strong> 高いほど処理速度は上がりますが、一般的に<strong>消費電力が増え、発熱も大きく</strong>なります。</li>
+                <li><strong>コア数:</strong> 多いほど並列処理能力は上がりますが、これも<strong>消費電力と発熱の増加</strong>につながります。</li>
+            </ul>
+            <p>問題文の会話では、トシさんはスマートフォンの性能として「充電1回分で動作できる時間」を重視しています。これは、バッテリー駆動時間が重要であることを意味します。</p>
+            <p>選択肢のプロセッサX, Y, Zを比較すると、</p>
+            <ul>
+                <li><strong>プロセッサZ:</strong> クロック周波数もコア数も最大で、最も処理性能が高いと考えられますが、発熱や消費電力も最も大きいと推測されます。</li>
+                <li><strong>プロセッサX:</strong> TDP（熱設計電力）の値が最も小さく、これは発熱や消費電力が最も少ないことを示唆します。</li>
+            </ul>
+            <p>したがって、バッテリー駆動時間を重視するノートパソコンやスマートフォンには、TDPの小さい<strong>プロセッサX</strong>が最も適していると考えられます。</p>
+        </div>
+
+        <p style="text-align:center; margin-top: 2em;"><a href="index.html">問題一覧に戻る</a></p>
+    </main>
+    <footer>
+        <p></p>
+    </footer>
+
+    <script>
+        var coll = document.getElementsByClassName("collapsible");
+        for (var i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                } else {
+                    content.style.display = "block";
+                }
+            });
+        }
+    </script>
+</body>
+</html>

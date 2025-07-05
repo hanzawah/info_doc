@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>問1 解説 - CPUの処理能力</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1><a href="index.html" style="color: #fff; text-decoration: none;">CPUの処理能力 解説</a></h1>
+    </header>
+    <main>
+        <h2 class="question-title">問1：コンピュータの五大装置</h2>
+        
+        <div class="explanation-section">
+            <h3>正解: ②</h3>
+            <p>
+                <a href="p30_cpu.pdf" target="_blank">[問題PDFを開く]</a> 
+                <a href="問題30解答.pdf" target="_blank">[解答PDFを開く]</a>
+                (問1は問題PDFの2ページ、解答PDFの1ページ目です)
+            </p>
+            <hr>
+            <h4>ポイント解説</h4>
+            <p>
+                この問題は、コンピュータを構成する基本的な5つの装置（五大装置）の役割を問うています。
+                下の図は、五大装置の基本的な関係性を表したものです。
+            </p>
+        </div>
+
+        <div class="mermaid" style="text-align: center;">
+            graph TD
+                %% スタイル定義
+                classDef device fill:#f0f8ff,stroke:#444,stroke-width:2px,font-weight:bold,font-size:16px
+                classDef cpu fill:#fff0f0,stroke:#c00,stroke-width:2px
+                classDef memory fill:#e6f3ff,stroke:#004080,stroke-width:2px
+
+                %% 全体の構成
+                Input(入力装置) --> MainMemory(主記憶装置)
+                MainMemory --> Output(出力装置)
+                MainMemory <--> AuxMemory(補助記憶装置)
+                MainMemory <==> CPU
+
+                %% CPUの内部構造
+                subgraph CPU
+                    direction LR
+                    Control(制御装置)
+                    ALU(演算装置)
+                    Register(レジスタ)
+
+                    %% CPU内部の流れ
+                    Register <--> ALU
+                    Control --> ALU
+                    Control --> Register
+                end
+
+                %% スタイルの適用
+                class Input,Output,Control,ALU,Register device
+                class MainMemory,AuxMemory memory
+                class CPU cpu
+                linkStyle default stroke-width:1px,stroke:gray
+        </div>
+
+        <div class="explanation-section">
+            <p>
+                問題文の会話と、この図を照らし合わせると、以下のようになります。
+            </p>
+            <ul>
+                <li><b>い (制御装置):</b> 命令を解読し、各装置へ指示を出す司令塔���</li>
+                <li><b>ろ (演算装置):</b> 実際に計算を行う装置。</li>
+                <li><b>は (入力装置):</b> 外部からデータを取り込む。</li>
+                <li><b>に (出力装置):</b> 結果を外部に表示する。</li>
+            </ul>
+            <p>
+                これらの組み合わせが一致する選択肢、②が正解となります。
+            </p>
+        </div>
+
+        <p style="text-align:center; margin-top: 2em;"><a href="index.html">問題一覧に戻る</a></p>
+    </main>
+    <footer>
+        <p></p>
+    </footer>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+</body>
+</html>

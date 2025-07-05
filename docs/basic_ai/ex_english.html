@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- タイトルをより学校で使いやすく、かつ内容がすぐにわからないものに変更 -->
+    <title>高校英文法：核心問題に挑む！</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+        }
+        .tab-button.active {
+            border-color: #3b82f6; /* blue-500 */
+            background-color: #ecf5ff; /* blue-50 */
+            color: #2563eb; /* blue-600 */
+        }
+        .sub-tab-button.active {
+            background-color: #3b82f6;
+            color: white;
+        }
+        /* 初期状態では不自然な強調をなくす */
+        #incorrect-word {
+            color: inherit; /* 親要素の色を継承 */
+            text-decoration: none; /* 下線をなくす */
+            font-weight: normal; /* 太字にしない */
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+    <div class="container mx-auto p-4 sm:p-6 md:p-8 max-w-4xl">
+        
+        <!-- ヘッダーの内容を変更し、より挑戦的な表現に -->
+        <header class="text-center mb-6">
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900">この英文、どこが違う？</h1>
+            <p class="text-slate-600 mt-2">高校生なら解けるはず…君はこの「間違い」を見抜けるか？</p>
+        </header>
+
+        <!-- メインページへのリンクを追加 -->
+        <div class="text-center mb-4">
+            <a href="../index.html" class="text-blue-500 hover:underline">← メインページへ戻る</a>
+        </div>
+
+        <!-- メインタブを3つに分割し、テキストを変更 -->
+        <div class="mb-6">
+            <div class="border-b border-slate-200">
+                <nav class="flex -mb-px space-x-2" aria-label="Tabs">
+                    <button onclick="changeMainTab(event, 'problem-tab')" class="tab-button active flex-1 sm:flex-none justify-center whitespace-nowrap py-4 px-4 border-b-2 font-bold text-base rounded-t-lg transition-colors">
+                        問題編
+                    </button>
+                    <button onclick="changeMainTab(event, 'basic-explanation-tab')" class="tab-button flex-1 sm:flex-none justify-center whitespace-nowrap py-4 px-4 border-b-2 font-bold text-base rounded-t-lg transition-colors">
+                        基本解説編
+                    </button>
+                    <button onclick="changeMainTab(event, 'advanced-tab')" class="tab-button flex-1 sm:flex-none justify-center whitespace-nowrap py-4 px-4 border-b-2 font-bold text-base rounded-t-lg transition-colors">
+                        発展
+                    </button>
+                </nav>
+            </div>
+        </div>
+
+        <!-- メインコンテンツ -->
+        <main>
+            <!-- 問題編タブのコンテンツ -->
+            <div id="problem-tab" class="main-tab-content space-y-8">
+                <section class="bg-white p-6 rounded-xl shadow-md">
+                    <!-- 問題提起のタイトルを調整 -->
+                    <h2 class="text-xl font-bold mb-4 text-slate-900">一見シンプル、でも奥が深い！この英文の盲点を見抜けるか？</h2>
+                    <div class="bg-red-50 p-4 rounded-lg border-l-4 border-red-400">
+                        <!-- 問題文の文字サイズを大きくし、より目立つように変更 -->
+                        <p class="font-mono text-2xl text-red-800">The suspect was seen <span id="incorrect-word">entered</span> the building at midnight.</p>
+                    </div>
+                    <div id="answer-reveal" class="hidden mt-4 bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
+                            <h3 class="font-bold text-green-800 mb-2">正解は...</h3>
+                            <p class="font-mono text-lg text-green-900">The suspect was seen <span class="font-bold">to enter</span> the building...</p>
+                            <p class="text-slate-600 my-1">または</p>
+                            <p class="font-mono text-lg text-green-900">The suspect was seen <span class="font-bold">entering</span> the building...</p>
+                    </div>
+                    <div class="text-center mt-6">
+                        <button onclick="revealAnswer()" class="bg-blue-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-600 transition-colors shadow hover:shadow-lg">
+                            答えを見る
+                        </button>
+                    </div>
+                </section>
+            </div>
+
+            <!-- 基本解説編タブのコンテンツ (既存の解説セクションを移動) -->
+            <div id="basic-explanation-tab" class="main-tab-content hidden space-y-8">
+                <section class="bg-white p-6 rounded-xl shadow-md">
+                    <h2 class="text-2xl font-bold mb-4 text-slate-900">なぜ間違いなの？【核心ルール】</h2>
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-lg font-semibold mb-2 text-blue-600">1. 能動態で考えてみよう</h3>
+                            <p class="text-slate-700">この文を能動態に直すと、「誰かが容疑者を見た」となります。知覚動詞 <span class="font-bold">see</span> は<span class="font-bold">「S+V+O+C」</span>の第5文型をとり、C(補語)には<span class="font-bold text-red-600">原形不定詞</span>か<span class="font-bold text-red-600">現在分詞</span>が来ます。</p>
+                            <div class="mt-3 bg-slate-100 p-4 rounded-lg">
+                                <p class="font-mono">Someone saw <span class="bg-yellow-200 px-1 rounded">the suspect</span> <span class="bg-cyan-200 px-1 rounded">enter</span> the building.</p>
+                                <p class="text-sm text-slate-600 mt-1">(C = <span class="font-bold">原形不定詞</span>: 入るという行為の全体を見た)</p>
+                                <hr class="my-2">
+                                <p class="font-mono">Someone saw <span class="bg-yellow-200 px-1 rounded">the suspect</span> <span class="bg-cyan-200 px-1 rounded">entering</span> the building.</p>
+                                <p class="text-sm text-slate-600 mt-1">(C = <span class="font-bold">現在分詞</span>: 入っている最中を見た)</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-semibold mb-2 text-blue-600">2. 受動態に変換する</h3>
+                            <p class="text-slate-700">これを目的語の <span class="font-bold">the suspect</span> を主語にして受動態にすると、C(補語)の部分に重要な変化が起こります。</p>
+                            <div class="mt-3 bg-slate-100 p-4 rounded-lg space-y-3">
+                                <p class="font-bold text-lg">【鉄則】<br>能動態で<span class="text-red-600">原形不定詞</span>だったものは、受動態で <span class="text-red-600 font-bold underline">to不定詞に復活</span>する！</p>
+                                <p class="font-bold text-lg">能動態で<span class="text-green-600">現在分詞</span>だったものは、受動態でも<span class="text-green-600 font-bold underline">そのまま</span>！</p>
+                            </div>
+                        </div>
+
+                        <div>
+                               <h3 class="text-lg font-semibold mb-2 text-blue-600">3. 結論</h3>
+                               <p class="text-slate-700">以上のルールから、`was seen` の後には `entered` という形は来ることができず、`to enter` または `entering` が正しい形となります。</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- 発展タブのコンテンツ (既存のコンテンツはそのまま) -->
+            <div id="advanced-tab" class="main-tab-content hidden">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <!-- サブタブ -->
+                    <div class="mb-6">
+                        <nav class="flex flex-wrap -mb-px gap-2" aria-label="Tabs">
+                            <button onclick="changeSubTab(event, 'sub-tab-1')" class="sub-tab-button active text-sm sm:text-base whitespace-nowrap py-2 px-4 font-medium rounded-lg transition-colors">
+                                知覚動詞の仲間
+                            </button>
+                            <button onclick="changeSubTab(event, 'sub-tab-2')" class="sub-tab-button text-sm sm:text-base whitespace-nowrap py-2 px-4 font-medium rounded-lg transition-colors">
+                                使役動詞との比較
+                            </button>
+                            <button onclick="changeSubTab(event, 'sub-tab-3')" class="sub-tab-button text-sm sm:text-base whitespace-nowrap py-2 px-4 font-medium rounded-lg transition-colors">
+                                なぜ 'to' が復活？
+                            </button>
+                        </nav>
+                    </div>
+                    <!-- サブタブコンテンツ -->
+                    <div id="sub-tab-contents">
+                        <div id="sub-tab-1" class="sub-tab-content">
+                            <h3 class="text-xl font-bold mb-3">知覚動詞の仲間</h3>
+                            <p class="mb-4">このルールは `see` だけでなく、以下の知覚動詞でも同様に適用されます。</p>
+                            <ul class="list-disc list-inside space-y-2 text-slate-700">
+                                <li><span class="font-bold text-slate-800">see</span>: 見る</li>
+                                <li><span class="font-bold text-slate-800">hear</span>: 聞く</li>
+                                <li><span class="font-bold text-slate-800">feel</span>: 感じる</li>
+                                <li><span class="font-bold text-slate-800">watch</span>: (じっと)見る</li>
+                                <li><span class="font-bold text-slate-800">notice</span>: 気づく</li>
+                                <li><span class="font-bold text-slate-800">observe</span>: 観察する</li>
+                            </ul>
+                            <div class="mt-4 bg-slate-100 p-4 rounded-lg">
+                                <p class="font-mono">I heard him <span class="text-red-600">call</span> my name.</p>
+                                <p class="font-mono text-slate-500">→ He was heard <span class="font-bold text-red-600">to call</span> my name.</p>
+                            </div>
+                        </div>
+
+                        <div id="sub-tab-2" class="sub-tab-content hidden">
+                            <h3 class="text-xl font-bold mb-3">使役動詞との比較</h3>
+                            <p class="mb-4">知覚動詞とよく似た振る舞いをする<span class="font-bold">使役動詞</span>も、受動態での変化を覚えておきましょう。</p>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-slate-100">
+                                            <th class="border-b-2 p-3">動詞</th>
+                                            <th class="border-b-2 p-3">能動態 (O+C)</th>
+                                            <th class="border-b-2 p-3">受動態 (be Vpp + C)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="border-b">
+                                            <td class="p-3 font-bold">make</td>
+                                            <td class="p-3 font-mono">原形不定詞</td>
+                                            <td class="p-3 font-mono font-bold text-red-600">to不定詞</td>
+                                        </tr>
+                                        <tr class="border-b">
+                                            <td class="p-3 font-bold">let</td>
+                                            <td class="p-3 font-mono">原形不定詞</td>
+                                            <td class="p-3 font-mono font-bold text-blue-600">be allowed to do</td>
+                                        </tr>
+                                        <tr class="border-b">
+                                            <td class="p-3 font-bold">have</td>
+                                            <td class="p-3 font-mono">原形不定詞</td>
+                                            <td class="p-3 font-mono font-bold text-slate-500">(原則、受動態にしない)</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="mt-4 bg-slate-100 p-4 rounded-lg">
+                                <p class="font-mono">My parents made me <span class="text-red-600">clean</span> my room.</p>
+                                <p class="font-mono text-slate-500">→ I was made <span class="font-bold text-red-600">to clean</span> my room.</p>
+                            </div>
+                        </div>
+
+                        <div id="sub-tab-3" class="sub-tab-content hidden">
+                            <h3 class="text-xl font-bold mb-3">なぜ 'to' が復活するのか？</h3>
+                            <div class="space-y-4 text-slate-700">
+                                <p>これは少し難しい話ですが、イメージで捉えると分かりやすくなります。</p>
+                                <p>能動態の <span class="font-mono bg-slate-100 px-1 rounded">see O C(原形)</span> は、「OがCするのを見る」という一つの塊として、非常に結びつきが強い特殊な形です。動詞 <span class="font-bold">see</span> の力が、後ろの動詞から <span class="font-bold">to</span> を消し去っている、とイメージしてください。</p>
+                                <p>しかし、受動態 <span class="font-mono bg-slate-100 px-1 rounded">be seen</span> になると、<span class="font-bold">see</span> 本来の力が弱まります。すると、消されていた <span class="font-bold">to</span> が「不定詞ですよ」という本来の目印として、ひょっこり姿を現すのです。</p>
+                                <p class="mt-2">文法的には、受動態の <span class="font-mono bg-slate-100 px-1 rounded">be seen</span> は、もはやC(補語)を従える第5文型動詞としての働きを失い、単に「見られる」という意味の動詞句になります。そのため、後ろに続く動作は、標準的な<span class="font-bold">to不定詞</span>で表される、と理解するとよいでしょう。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // --- Answer reveal function ---
+        function revealAnswer() {
+            // Show the answer box
+            document.getElementById('answer-reveal').classList.remove('hidden');
+
+            // Highlight the incorrect word by adding classes
+            const incorrectWord = document.getElementById('incorrect-word');
+            incorrectWord.classList.add('font-bold', 'underline', 'decoration-wavy', 'decoration-red-500');
+        }
+
+        // --- Tab switching functions ---
+        function changeMainTab(event, tabID) {
+            // Hide all main tab contents
+            document.querySelectorAll('.main-tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            // Deactivate all main tab buttons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Show the selected tab content
+            document.getElementById(tabID).classList.remove('hidden');
+            // Activate the selected tab button
+            event.currentTarget.classList.add('active');
+        }
+
+        function changeSubTab(event, tabID) {
+            // Hide all sub-tab contents
+            document.querySelectorAll('.sub-tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            // Deactivate all sub-tab buttons
+            document.querySelectorAll('.sub-tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Show the selected sub-tab content
+            document.getElementById(tabID).classList.remove('hidden');
+            // Activate the selected sub-tab button
+            event.currentTarget.classList.add('active');
+        }
+
+        // 初期表示時に「問題編」タブをアクティブにする
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('.tab-button').click(); // 最初のタブをクリック
+        });
+    </script>
+
+</body>
+</html>

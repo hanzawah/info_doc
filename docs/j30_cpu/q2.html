@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>問2 解説 - CPUの処理能力</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1><a href="index.html" style="color: #fff; text-decoration: none;">CPUの処理能力 解説</a></h1>
+    </header>
+    <main>
+        <h2 class="question-title">問2：レジスタ長と情報量</h2>
+        
+        <div class="explanation-section">
+            <h3>正解: ④</h3>
+            <p>
+                <a href="p30_cpu.pdf" target="_blank">[問題PDFを開く]</a> 
+                <a href="問題30解答.pdf" target="_blank">[解答PDFを開く]</a>
+                (問2は問題PDFの3ページ、解答PDFの1ページ目です)
+            </p>
+            <hr>
+            <h4>ポイント解説</h4>
+            <p>
+                レジスタ長（ビット数）がNビットのとき、表現できる情報の種類は <strong>2<sup>N</sup>通り</strong> になります。
+                この問題では、プロセッサA(64bit)がCPU「4004」(4bit)の何倍の情報を記憶できるかを問われています。
+            </p>
+            <p>
+                それぞれの情報量は、
+            </p>
+            <ul>
+                <li>CPU「4004」: 2<sup>4</sup> 通り</li>
+                <li>プロセッサA: 2<sup>64</sup> 通り</li>
+            </ul>
+            <p>
+                したがって、何倍かを求めるには割り算をします。
+            </p>
+            <p style="text-align: center; font-size: 1.2em; font-weight: bold;">
+                2<sup>64</sup> &div; 2<sup>4</sup> = 2<sup>(64 - 4)</sup> = 2<sup>60</sup>
+            </p>
+            <p>
+                よって、正解は 2<sup>60</sup> 倍となります。
+            </p>
+        </div>
+
+        <p style="text-align:center; margin-top: 2em;"><a href="index.html">問題一覧に戻る</a></p>
+    </main>
+    <footer>
+        <p></p>
+    </footer>
+</body>
+</html>

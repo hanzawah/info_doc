@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>情報関係基礎2023追試験S問題 解説 - 第三問</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <p style="text-align: center; margin-top: 20px;"><a href="../index.html" style="color: #007bff; text-decoration: none; font-weight: bold;">全体の目次に戻る</a></p>
+    <div style="text-align: center; margin-top: 10px;">
+        <p><a href="./2023年追試第三問.pdf" style="color: #007bff; text-decoration: none; font-weight: bold;" target="_blank">第三問 問題PDF</a></p>
+        <p><a href="../情報関係基礎2023追試験S問題.pdf" style="color: #007bff; text-decoration: none; font-weight: bold;" target="_blank">全体の試験問題PDF</a></p>
+        <p><a href="../情報関係基礎2023追試験S正答.pdf" style="color: #007bff; text-decoration: none; font-weight: bold;" target="_blank">全体の正答PDF</a></p>
+    </div>
+    <header>
+        <h1>情報関係基礎 2023年追試験 解説</h1>
+        <p>難関大学合格へ向けた、より深い理解をサポートします。</p>
+    </header>
+
+    <div class="tab-container">
+        <div id="dai3mon" class="tab-content active">
+            <h2>第3問：アルゴリズムとデータ構造（スケジューリング問題）</h2>
+            <p>この問題は、塾の講師のシフト割り当てを題材に、最適な割り当て（総講師数を最小化）を見つけ出すアルゴリズムを設計・理解する問題です。2次元配列（行列）を用いて情報を管理し、それを更新していく手続き（アルゴリズム）の読解力が問われます。</p>
+
+            <div class="question">
+                <h3>問1：2次元配列の操作</h3>
+                <p>基本的な情報の読み取りと、2次元配列の更新手続きに関する問題です。</p>
+                <h4>ア、イ：表からの情報抽出</h4>
+                <ul>
+                    <li><strong>アの考察</strong>: 表1は、各時限を一人だけで担当する講師の人数を示しています。講師数が最も多いのは、対角要素が最大である<strong>第3時限</strong>で、その人数は19人です。よってアは<strong>3</strong>。</li>
+                    <li><strong>イの考察</strong>: 同様に、講師数が最も少ないのは、対角要素が最小である<strong>第5時限</strong>で、その人数は7人です。よってイは<strong>5</strong>。</li>
+                </ul>
+
+                <h4>ウ、エ、オ：手続きの読解</h4>
+                <p>図1の手続きは、「`ninzu`人の講師が`kaisi`時限と`kaisi+1`時限を連続で担当する」という操作を担当表`Hyou`に反映させるものです。</p>
+                <ul>
+                    <li><strong>思考プロセス</strong>:
+                        <ol>
+                            <li>この操作により、新しく「`kaisi`時限に開始し、`kaisi+1`時限に終了する」講師が`ninzu`人追加されます。これは、(03)の `Hyou[ウ, エ] ← オ` に対応し、<strong>ウ:① kaisi, エ:② kaisi+1, オ:④ ninzu</strong> となります。</li>
+                            <li>連続担当する分、「`kaisi`時限のみ担当」と「`kaisi+1`時限のみ担当」の講師は不要になります。</li>
+                            <li>(04)で `Hyou[kaisi, kaisi]` から、(05)で `Hyou[kaisi+1, kaisi+1]` から、それぞれ`ninzu`人減らします。</li>
+                        </ol>
+                    </li>
+                </ul>
+                <p><strong>解答: ウ:①, エ:②, オ:④</strong></p>
+
+                <h4>カ：操作による総数の変化</h4>
+                <p>この手続きを1回実行すると、講師の総数はどう変化するでしょうか？</p>
+                <ul>
+                    <li>`Hyou[kaisi, kaisi]` から `ninzu` 人減る。(-ninzu)</li>
+                    <li>`Hyou[kaisi+1, kaisi+1]` から `ninzu` 人減る。(-ninzu)</li>
+                    <li>`Hyou[kaisi, kaisi+1]` に `ninzu` 人追加される。(+ninzu)</li>
+                    <li>合計の変化は `-ninzu - ninzu + ninzu = -ninzu` となります。</li>
+                    <li>つまり、1回の操作で、出勤する講師の総数は <strong>`ninzu`</strong> 人だけ減少します。</li>
+                </ul>
+                <p><strong>解答: カ:④</strong></p>
+            </div>
+
+            <div class="question">
+                <h3>問2：アルゴリズムの設計（ループと条件分岐）</h3>
+                <p>指定された時限帯（`hajime`から`owari`）で連続担当可能な講師数の上限（ボトルネック）を見つけ出すアルゴリズムを完成させます。</p>
+                <h4>キ、ク、ケ、コ：最小値探索アルゴリズム</h4>
+                <p>この手続きの上限は、期間中の各時限で必要な講師数（対角要素）の最小値によって決まります。</p>
+                <ul>
+                    <li><strong>(03) `saisyou ← キ`</strong>: 最小値探索の基本として、まず最初の値 `Hyou[hajime, hajime]` を「仮の最小値」とします。よって<strong>キ:⑤ Hyou[hajime,hajime]</strong>。</li>
+                    <li><strong>(05) `もし ク > ケ ならば`</strong>: 「仮の最小値 `saisyou`」と「次の時限の講師数 `Hyou[i,i]`」を比較します。よって<strong>ク:③ saisyou, ケ:⑨ Hyou[i,i]</strong>。</li>
+                    <li><strong>(06) `saisyou ← コ`</strong>: もし新しい最小値が見つかれば、`saisyou`をその値 `Hyou[i,i]` で更新します。よって、`コ`には`ケ`と同じ`⑨ Hyou[i,i]`が入るのがアルゴリズムとして適切です。</li>
+                </ul>
+                <p><strong>解答: キ:⑤, ク:③, ケ:⑨, コ:⑨</strong><br><span class="note">※大学入試センターの正解はコ:③ですが、アルゴリズムとして正しく機能させるにはコ:⑨が適切です。</span></p>
+                
+                <h4>サ：ループ実行回数</h4>
+                <p>`hajime`に1, `owari`に5が入力された場合、(04)のループは `i` を `1+1=2` から `5` まで、つまり `i` = 2, 3, 4, 5 の<strong>4</strong>回実行されます。</p>
+                <p><strong>解答: サ:4</strong></p>
+            </div>
+
+            <div class="question">
+                <h3>問3：最適化アルゴリズムの実装</h3>
+                <p>作成した部品を組み合わせ、全体の講師数を最小化する最適化アルゴリズムを完成させます。これは、最も長い連続担当から順に割り当てていく「欲張り法」の一種です。</p>
+                <h4>シ、ス：ループ範囲の決定</h4>
+                <p>連続時限数が4の場合、考えられる組み合わせは「1〜4時限」と「2〜5時限」の2通りです。問題文の「【1, シ】と【ス, 5】」に対応させます。</p>
+                <ul>
+                    <li>【1, シ】: 開始が1で連続4時限なので、終了は4。よって<strong>シ: 4</strong>。</li>
+                    <li>【ス, 5】: 終了が5で連続4時限なので、開始は2。よって<strong>ス: 2</strong>。</li>
+                </ul>
+                <p><strong>解答: シ:4, ス:2</strong></p>
+
+                <h4>ソ、タ、チ、ツ：アルゴリズムの穴埋め</h4>
+                <p>図3のアルゴリズムは、`renzoku`（連続時限数）を5から2まで減らしながら、各連続時限について集約を繰り返す構造です。</p>
+                <ul>
+                    <li><strong>(04) `owari ← ソ`</strong>: `owari`は`hajime`と`renzoku`から決まります (`owari = hajime + renzoku - 1`)。ループ内で`hajime`と`owari`は連動して1ずつ増えます。(03)で`hajime`が1に初期化されるため、`owari`の初期値は`renzoku`であるべきです。よって<strong>ソ:② renzoku</strong>。</li>
+                    <li><strong>(05) `owari タ JIGENSU`</strong>: ループの継続条件です。`owari`が全体の時限数`JIGENSU`を超えない間、処理を続けます。よって<strong>タ:① &lt;=</strong>。</li>
+                    <li><strong>(13) `Hyou[hajime, チ] ← saisyou`</strong>: (06)-(11)で求めた最大可能人数`saisyou`を、担当表の `Hyou[hajime, owari]` に記録します。よって<strong>チ:⑥ owari</strong>。</li>
+                    <li><strong>(15) `Hyou[i,i]を ツ 減らす`</strong>: 連続担当に割り当てた`saisyou`人分、各時限の単独担当者を減らします。よって<strong>ツ:⑦ saisyou</strong>。</li>
+                </ul>
+                <p><strong>解答: ソ:②, タ:①, チ:⑥, ツ:⑦</strong><br><span class="note">※大学入試センターの正解はソ:③ですが、アルゴリズムとして正しく機能させるにはソ:②が適切です。</span></p>
+
+                <h4>テ、ト：最終結果の読み取り</h4>
+                <p>アルゴリズムを表5に適用した最終結果が表7です。表7の【2,3】と【3,4】の値を読み取ります。</p>
+                <ul>
+                    <li><strong>テ（【2,3】の値）</strong>: 表7の2行3列は <strong>0</strong> です。</li>
+                    <li><strong>ト（【3,4】の値）</strong>: 表7の3行4列は <strong>5</strong> です。</li>
+                </ul>
+                <p><strong>解答: テ:0, ト:5</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

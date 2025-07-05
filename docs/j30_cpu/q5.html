@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>問5：CPUの総合性能比較 - CPU解説</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .collapsible { background-color: #eee; color: #444; cursor: pointer; padding: 18px; width: 100%; border: none; text-align: left; outline: none; font-size: 15px; margin-bottom: 10px; border-radius: 5px; }
+        .collapsible:hover { background-color: #ddd; }
+        .content { padding: 0 18px; display: none; overflow: hidden; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="index.html" style="color: #fff; text-decoration: none;">CPUの処理能力 解説</a></h1>
+    </header>
+    <main>
+        <h2 class="question-title">問5：CPUの総合性能比較</h2>
+
+        <button type="button" class="collapsible">▼ クリックして問題文を表示</button>
+        <div class="content">
+            <img src="images/question_q5.png" alt="問5の問題文" style="width:100%;">
+        </div>
+        
+        <div class="explanation-section">
+            <h3>正解: ③</h3>
+            <p>
+                <a href="p30_cpu.pdf" target="_blank">[問題PDFを開く]</a> 
+                <a href="問題30解答.pdf" target="_blank">[解答PDFを開く]</a>
+                (問5は問題PDFの4ページ、解答PDFの2ページ目です)
+            </p>
+            <hr>
+            <h4>ポイント解説</h4>
+            <p>
+                CPUの実際の性能は、クロック周波数だけでなく、1つの命令を処理するのに何クロック必要かを示す「CPI (Clocks Per Instruction)」も考慮する必要があります。
+                <strong>平均命令実行時間 = CPI &div; クロック周波数</strong> 
+                で計算され、この値が小さいほど高性能と言えます。
+            </p>
+        </div>
+
+        <div class="explanation-section">
+            <h3>性能比較の計算</h3>
+            <p>プロセッサAが「4004」に比べて何倍の速度で実行できるか、それぞれの平均命令実行時間を求めて比較します。</p>
+            <ul>
+                <li><strong>「4004」の平均命令実行時間 (X):</strong><br> X = 10 (CPI) &div; 750kHz = 10 / (750 × 10<sup>3</sup>) 秒</li>
+                <li><strong>プロセッサAの平均命令実行時間 (Y):</strong><br> Y = 0.8 (CPI) &div; 2.4GHz = 0.8 / (2.4 × 10<sup>9</sup>) 秒</li>
+            </ul>
+            <p>何倍速いかを求めるには、X &div; Y を計算します。</p>
+            <p style="text-align: center; font-size: 1.2em; font-weight: bold;">
+                X / Y = (10 / 750k) / (0.8 / 2.4G) <br>
+                = (10 × 2.4 × 10<sup>9</sup>) / (750 × 10<sup>3</sup> × 0.8) <br>
+                = (24 × 10<sup>9</sup>) / (600 × 10<sup>3</sup>) <br>
+                = (24 / 600) × 10<sup>6</sup> <br>
+                = 0.04 × 10<sup>6</sup> = 40,000
+            </p>
+            <p>したがって、プロセッサAは「4004」の<strong>40,000倍</strong>の速度で実行できることになります。</p>
+        </div>
+
+        <p style="text-align:center; margin-top: 2em;"><a href="index.html">問題一覧に戻る</a></p>
+    </main>
+    <footer>
+        <p></p>
+    </footer>
+
+    <script>
+        var coll = document.getElementsByClassName("collapsible");
+        for (var i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                } else {
+                    content.style.display = "block";
+                }
+            });
+        }
+    </script>
+</body>
+</html>

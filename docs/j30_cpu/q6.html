@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>問6：高速化技術の正誤 - CPU解説</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .collapsible { background-color: #eee; color: #444; cursor: pointer; padding: 18px; width: 100%; border: none; text-align: left; outline: none; font-size: 15px; margin-bottom: 10px; border-radius: 5px; }
+        .collapsible:hover { background-color: #ddd; }
+        .content { padding: 0 18px; display: none; overflow: hidden; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="index.html" style="color: #fff; text-decoration: none;">CPUの処理能力 解説</a></h1>
+    </header>
+    <main>
+        <h2 class="question-title">問6：高速化技術の正誤</h2>
+
+        <button type="button" class="collapsible">▼ クリックして問題���を表示</button>
+        <div class="content">
+            <img src="images/question_q6.png" alt="問6の問題文" style="width:100%;">
+        </div>
+        
+        <div class="explanation-section">
+            <h3>正解: ①, ③</h3>
+            <p>
+                <a href="p30_cpu.pdf" target="_blank">[問題PDFを開く]</a> 
+                <a href="問題30解答.pdf" target="_blank">[解答PDFを開く]</a>
+                (問6は問題PDFの4ページ、解答PDFの3ページ目です)
+            </p>
+            <hr>
+            <h4>ポイント解説</h4>
+            <p>
+                現代のCPUは、単純にクロック周波数を上げるだけでなく、様々な技術を組み合わせて高速化を実現しています。この問題は、それらの技術（マルチコア、パイプライン、分岐予測など）についての基本的な理解を問うものです。
+            </p>
+        </div>
+
+        <div class="explanation-section">
+            <h3>各選択肢の解説</h3>
+            <ul>
+                <li><strong>① (不適当):</strong> 「ある演算結果をもとに次の演算を行う...」場合、前の演算が終わるまで次の演算は開始できません。これをデータハザードと呼び、単純にコアを増やしても解決はできません。</li>
+                <li><strong>② (適当):</strong> 一つの命令を複数のステージに分割し、流れ作業��ように並行処理する技術を「パイプライン処理」と呼びます。これにより、見かけ上の処理時間を短縮できます。</li>
+                <li><strong>③ (不適当):</strong> 条件分岐命令では、どちらの分岐に進むか結果が確定するまで待つと時間がかかります。そこで「おそらくこちらに進むだろう」と予測して先回りして命令を実行しておく技術を「分岐予測」や「投機実行」と呼びます。しかし、すべての分岐を想定して実行するわけではありません。</li>
+                <li><strong>④ (適当):</strong> プログラムの実行順序を解析し、将来必要になりそうな命令をあらかじめメモリから読み込んでおく「命令プリフェッチ」という技術があります。</li>
+            </ul>
+            <p>問題では「適当でないもの」を2つ選ぶため、正解は <strong>① と ③</strong> (順不同) となります。</p>
+        </div>
+
+        <p style="text-align:center; margin-top: 2em;"><a href="index.html">問題一覧に戻る</a></p>
+    </main>
+    <footer>
+        <p></p>
+    </footer>
+
+    <script>
+        var coll = document.getElementsByClassName("collapsible");
+        for (var i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                } else {
+                    content.style.display = "block";
+                }
+            });
+        }
+    </script>
+</body>
+</html>

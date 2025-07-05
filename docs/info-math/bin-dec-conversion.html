@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二進数体験シミュレーター</title>
+    <!-- Tailwind CSSを読み込み -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&family=Roboto+Mono:wght@500;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans JP', 'M PLUS Rounded 1c', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .font-roboto-mono { font-family: 'Roboto Mono', monospace; }
+
+        /* スイッチのスタイル */
+        .switch-light {
+            transition: all 0.2s ease-in-out;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .switch-on {
+            background-color: #fef08a; color: #ca8a04;
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(254, 240, 138, 0.8), inset 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        /* タブのスタイル */
+        .tab-btn {
+            transition: all 0.2s ease-in-out;
+            font-weight: 700;
+        }
+        .tab-btn.active {
+            background-color: #3b82f6; /* Blue-500 */
+            color: white;
+        }
+        .tab-btn:not(.active) {
+            background-color: #e5e7eb; /* Gray-200 */
+            color: #4b5563; /* Gray-600 */
+        }
+        .dark .tab-btn:not(.active) {
+            background-color: #374151; /* Gray-700 */
+            color: #d1d5db; /* Gray-300 */
+        }
+        
+        /* 選択された重みのスタイル */
+        .weight-label {
+            transition: color 0.2s ease-in-out;
+        }
+        .weight-selected {
+            color: #ef4444 !important; /* red-500 */
+        }
+        .dark .weight-selected {
+            color: #f87171 !important; /* red-400 */
+        }
+
+        /* 解説コンテンツのスタイル */
+        .prose h2 {
+             border-bottom: 2px solid #3b82f6;
+             padding-bottom: 0.5rem;
+             margin-top: 2.5rem;
+             font-size: 1.25rem; /* 20px */
+        }
+        .prose code {
+            background-color: #e5e7eb;
+            color: #1f2937;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 500;
+        }
+        .dark .prose {
+            color: #d1d5db;
+        }
+        .dark .prose h2 {
+            color: #e5e7eb;
+        }
+        .dark .prose strong {
+            color: #f9fafb;
+        }
+        .dark .prose code {
+            background-color: #374151;
+            color: #e5e7eb;
+        }
+
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 flex flex-col items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 md:p-8">
+        
+        <!-- ヘッダー -->
+        <header class="text-center mb-6">
+            <h1 class="text-xl md:text-2xl font-extrabold text-blue-600 dark:text-blue-400">二進数体験シミュレーター</h1>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">（下のスイッチをクリックして、値を自由に変更できます）</p>
+        </header>
+
+        <!-- タブ切り替えボタン -->
+        <div class="mb-6 flex justify-center rounded-lg shadow-sm">
+            <button id="tab-btn-simulator" class="tab-btn active w-1/2 py-3 px-4 rounded-l-lg">変換シミュレーター</button>
+            <button id="tab-btn-knowledge" class="tab-btn w-1/2 py-3 px-4 rounded-r-lg">原理と応用</button>
+        </div>
+
+        <!-- タブコンテンツエリア -->
+        <main>
+            <!-- タブ1: シミュレーター -->
+            <div id="tab-content-simulator">
+                <!-- 8bit スイッチエリア -->
+                <div class="mb-6">
+                    <p class="text-center text-sm font-bold text-gray-500 dark:text-gray-400 mb-4">二進法（8ビット）</p>
+                    <div id="switches-container" class="grid grid-cols-4 md:grid-cols-8 gap-3 md:gap-4"></div>
+                </div>
+                <!-- 計算エリア -->
+                <div class="mb-6 p-6 bg-blue-50 dark:bg-gray-700/50 rounded-2xl min-h-[100px] flex flex-col justify-center">
+                    <p class="text-left text-sm font-bold text-gray-500 dark:text-gray-400 mb-2">十進数</p>
+                    <div class="flex items-center justify-center flex-wrap gap-x-4">
+                        <div id="calculation-area" class="text-2xl md:text-3xl font-bold text-yellow-700 dark:text-yellow-400 font-roboto-mono flex items-center flex-wrap justify-center gap-x-3"></div>
+                        <div id="result-prefix" class="text-2xl md:text-3xl font-bold text-gray-600 dark:text-gray-300">=</div>
+                        <div id="decimal-result" class="text-4xl md:text-5xl font-extrabold text-blue-600 dark:text-blue-400 font-roboto-mono">0</div>
+                    </div>
+                </div>
+                <!-- コントロールボタン -->
+                <div class="flex justify-center items-center gap-4">
+                    <button id="reset-button" class="px-8 py-3 bg-red-500 hover:bg-red-600 text-white font-bold rounded-lg shadow-md transition-transform transform hover:scale-105 active:scale-95">リセット</button>
+                </div>
+            </div>
+
+            <!-- タブ2: 原理と応用 -->
+            <div id="tab-content-knowledge" class="hidden prose dark:prose-invert max-w-none">
+                <div class="p-5">
+                    <h2 class="!mt-0">基数変換の原理</h2>
+                    <p>N進数で表現された数値を十進数に変換するには、各桁の数値に、その桁の「重み」を掛けて、それらをすべて足し合わせます。N進数のk桁目（一番右を0桁目とする）の重みは <strong>N<sup>k</sup></strong> で表されます。</p>
+                    <p>例えば、二進数 <code>1101</code> を十進数に変換する場合は以下のようになります。</p>
+                    <p class="font-roboto-mono text-center p-4 bg-gray-100 dark:bg-gray-900 rounded-md">(1 × 2<sup>3</sup>) + (1 × 2<sup>2</sup>) + (0 × 2<sup>1</sup>) + (1 × 2<sup>0</sup>)<br>= 8 + 4 + 0 + 1 = 13</p>
+                    
+                    <h2>負の数の表現 (2の補数)</h2>
+                    <p>コンピュータ内部では、負の数を効率的に扱うために**2の補数（Two's Complement）**という形式が広く用いられます。8ビットの場合、最上位ビット（MSB: Most Significant Bit）が <code>0</code> なら正の数、<code>1</code> なら負の数を表す符号ビットとして扱います。</p>
+                    <p>ある正の数のビット列から、それに対応する負の数を得るには、以下の手順を実行します。</p>
+                    <ol class="list-decimal list-inside space-y-2">
+                        <li><strong>全ビットを反転させる</strong>（0を1に、1を0に）</li>
+                        <li>その結果に <strong>1を加える</strong></li>
+                    </ol>
+                    <p>例：<code>5</code> (<code>00000101</code>) から <code>-5</code> を作る</p>
+                    <ul class="list-disc list-inside space-y-2">
+                        <li>ビット反転: <code>11111010</code></li>
+                        <li>1を加える: <code>11111011</code>  ← これが <code>-5</code> を表す2の補数表現です。</li>
+                    </ul>
+                    <p>このシミュレーターで <code>11111011</code> を入力すると <code>251</code> になりますが、最上位ビットを符号として解釈すると、それは <code>-5</code> となります。</p>
+
+                    <h2>コンピュータにおける応用</h2>
+                    <p>二進数の概念は、コンピュータ科学のあらゆる領域で基礎となります。</p>
+                    <ul class="list-disc list-inside space-y-2">
+                        <li><strong>IPアドレス</strong>: IPv4アドレスは <code>192.168.1.1</code> のように表記されますが、内部的には32ビットの二進数です。8ビットずつに区切った各数値を十進数で表現しています。</li>
+                        <li><strong>ビット演算</strong>: プログラムにおいて、特定のフラグを管理したり、高速な計算を行ったりするためにビット単位での論理演算（AND, OR, XOR, NOT）が用いられます。これはハードウェアの制御や画像処理など、パフォーマンスが要求される場面で特に重要です。</li>
+                        <li><strong>文字コード</strong>: ASCIIやUnicodeといった文字コード体系は、各文字に固有の数値を割り当てています。その数値は最終的に二進数としてコンピュータに記録・処理されます。</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const switchesContainer = document.getElementById('switches-container');
+            const calculationArea = document.getElementById('calculation-area');
+            const decimalResult = document.getElementById('decimal-result');
+            const resetButton = document.getElementById('reset-button');
+            const tabBtnSimulator = document.getElementById('tab-btn-simulator');
+            const tabBtnKnowledge = document.getElementById('tab-btn-knowledge');
+            const tabContentSimulator = document.getElementById('tab-content-simulator');
+            const tabContentKnowledge = document.getElementById('tab-content-knowledge');
+
+            let switchStates = [true, false, false, false, false, true, false, false]; // 初期値 132
+            
+            function initializeSimulator() {
+                switchesContainer.innerHTML = '';
+                for (let i = 0; i < 8; i++) {
+                    const weight = 2 ** (7 - i);
+                    const switchWrapper = document.createElement('div');
+                    switchWrapper.className = 'flex flex-col items-center';
+
+                    const switchElement = document.createElement('div');
+                    switchElement.className = 'switch-light w-full h-20 md:h-24 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center text-3xl md:text-4xl font-bold cursor-pointer select-none font-roboto-mono';
+                    switchElement.textContent = '0';
+                    switchElement.dataset.index = i;
+                    
+                    const weightLabel = document.createElement('div');
+                    weightLabel.className = 'mt-2 text-center';
+                    
+                    const decimalWeightSpan = document.createElement('span');
+                    decimalWeightSpan.className = 'weight-label block text-2xl md:text-3xl font-bold text-gray-700 dark:text-gray-300 font-roboto-mono';
+                    decimalWeightSpan.textContent = weight;
+                    decimalWeightSpan.dataset.weightIndex = i;
+
+                    const powerOfTwoSpan = document.createElement('span');
+                    powerOfTwoSpan.className = 'block text-sm md:text-base text-gray-500 dark:text-gray-400 font-roboto-mono';
+                    powerOfTwoSpan.innerHTML = `2<sup>${7 - i}</sup>`;
+
+                    weightLabel.appendChild(decimalWeightSpan);
+                    weightLabel.appendChild(powerOfTwoSpan);
+
+                    switchWrapper.appendChild(switchElement);
+                    switchWrapper.appendChild(weightLabel);
+                    switchesContainer.appendChild(switchWrapper);
+                }
+                updateSimulatorUI();
+            }
+
+            function updateSimulatorUI() {
+                let total = 0;
+                let calculationHTML = '';
+                
+                switchStates.forEach((isOn, index) => {
+                    const switchElement = switchesContainer.querySelectorAll('.switch-light')[index];
+                    const weight = 2 ** (7 - index);
+                    const weightLabel = switchesContainer.querySelector(`[data-weight-index='${index}']`);
+
+                    if (isOn) {
+                        switchElement.classList.add('switch-on');
+                        switchElement.textContent = '1';
+                        weightLabel.classList.add('weight-selected');
+
+                        total += weight;
+                        if (calculationHTML !== '') {
+                            calculationHTML += `<span class="text-gray-400 mx-1">+</span>`;
+                        }
+                        calculationHTML += `<span class="calc-term">${weight}</span>`;
+                    } else {
+                        switchElement.classList.remove('switch-on');
+                        switchElement.textContent = '0';
+                        weightLabel.classList.remove('weight-selected');
+                    }
+                });
+
+                if (total === 0) {
+                    calculationArea.innerHTML = '';
+                    document.getElementById('result-prefix').style.display = 'none';
+                } else {
+                    calculationArea.innerHTML = calculationHTML;
+                    document.getElementById('result-prefix').style.display = 'inline';
+                }
+                decimalResult.textContent = total;
+            }
+
+            switchesContainer.addEventListener('click', (e) => {
+                const target = e.target;
+                if (target.classList.contains('switch-light')) {
+                    const index = parseInt(target.dataset.index, 10);
+                    switchStates[index] = !switchStates[index];
+                    updateSimulatorUI();
+                }
+            });
+
+            resetButton.addEventListener('click', () => {
+                switchStates.fill(false);
+                updateSimulatorUI();
+            });
+
+            function switchTab(tabName) {
+                if (tabName === 'simulator') {
+                    tabContentSimulator.classList.remove('hidden');
+                    tabContentKnowledge.classList.add('hidden');
+                    tabBtnSimulator.classList.add('active');
+                    tabBtnKnowledge.classList.remove('active');
+                } else if (tabName === 'knowledge') {
+                    tabContentSimulator.classList.add('hidden');
+                    tabContentKnowledge.classList.remove('hidden');
+                    tabBtnSimulator.classList.remove('active');
+                    tabBtnKnowledge.classList.add('active');
+                }
+            }
+
+            tabBtnSimulator.addEventListener('click', () => switchTab('simulator'));
+            tabBtnKnowledge.addEventListener('click', () => switchTab('knowledge'));
+
+            initializeSimulator();
+        });
+    </script>
+</body>
+</html>

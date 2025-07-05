@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>問3 解説 - CPUの処理能力</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1><a href="index.html" style="color: #fff; text-decoration: none;">CPUの処理能力 解説</a></h1>
+    </header>
+    <main>
+        <h2 class="question-title">問3：命令実行サイクル</h2>
+        
+        <div class="explanation-section">
+            <h3>正解: ウ:①, エ:⓪, オ:②</h3>
+            <p>
+                <a href="p30_cpu.pdf" target="_blank">[問題PDFを開く]</a> 
+                <a href="問題30解答.pdf" target="_blank">[解答PDFを開く]</a>
+                (問3は問題PDFの3ページ、解答PDFの2ページ目です)
+            </p>
+            <hr>
+            <h4>ポイント解説</h4>
+            <p>
+                CPUが命令を実行する流れ（命令実行サイクル）は、いくつかの段階に分かれています。この問題は、その詳細なステップを問うています。
+                特に、命令を実行するために必要なデータ（オペランド）を主記憶から取ってくる「データの取り出し」がどの段階で行われるかがポイントです。
+            </p>
+        </div>
+
+        <div class="mermaid" style="text-align: center;">
+graph TD
+    subgraph CPU ["<div style='font-size: 1.2em; font-weight: bold;'>中央処理装置 (CPU)</div>"]
+        direction LR
+        CU["<div style='font-weight: bold;'>制御装置</div>"]
+        ALU["<div style='font-weight: bold;'>演算装置</div>"]
+    end
+
+    subgraph MEM ["<div style='font-size: 1.2em; font-weight: bold;'>主記憶装置</div>"]
+        direction LR
+        INST["命令<br>(プログラム)"]
+        DATA["データ<br>(オペランド)"]
+    end
+
+    %% フロー定義
+    CU -- "1. 命令を読込 (フェッチ)" --> MEM
+    MEM -- "2. 命令をCPUへ" --> CU
+    CU -- "3. 命令を解読 (デコード)" --> CU
+    CU -- "4. データを読込" --> MEM
+    MEM -- "5. データをALUへ" --> ALU
+    CU -- "6. 実行を指示" --> ALU
+    ALU -- "7. 命令を実行 (エグゼキュート)" --> ALU
+    ALU -- "8. 結果を書き込み" --> MEM
+
+    %% スタイル定義
+    style CPU fill:#fff0f0,stroke:#c00,stroke-width:2px
+    style MEM fill:#e6f3ff,stroke:#004080,stroke-width:2px
+    style CU fill:#fff5e6,stroke:#d98c00
+    style ALU fill:#f0fff0,stroke:#0c0
+        </div>
+
+        <div class="explanation-section">
+            <p>
+                問題文の図と、一般的な命令実行サイクルを照らし合わせると、以下のようになります。
+            </p>
+            <ul>
+                <li>命令を取り出した後、CPUはその命令が何をするものなのかを理解する必要があります。これが<b>ウ：命令の解読 (Decode)</b> です。</li>
+                <li>次に、命令の実行に必要なデータを主記憶から取ってくる必要があります。これが<b>エ：データの取り出し (Operand Fetch)</b> です。</li>
+                <li>データが揃ったら、演算装置(ALU)が実際に処理を行います。これが<b>オ：命令の実行 (Execute)</b> です。</li>
+            </ul>
+            <p>
+                したがって、正解は <b>ウが「① 命令の解読」</b>、<b>エが「⓪ データの取り出し」</b>、<b>オが「② 命令の実行」</b> の組み合わせとなります。
+            </p>
+        </div>
+
+        <div class="explanation-section" style="background-color: #f9f9f9; padding: 15px; border-radius: 5px;">
+            <h4 style="margin-top:0;">【参考】ノイマン型アーキテクチャ（プログラム内蔵方式）とは？</h4>
+            <p>
+                CPUが実行すべき<b>命令（プログラム）</b>と、その処理対象となる<b>データ</b>を、区別せずに同じ主記憶装置（メモリ）上に格納し、逐次処理していく方式です。この特徴から「<b>プログラム内蔵方式</b>（Stored Program Computer）」とも呼ばれます。
+                詳細は<a href="https://ja.wikipedia.org/wiki/%E3%83%8E%E3%82%A4%E3%83%9E%E3%83%B3%E5%9E%8B" target="_blank" rel="noopener noreferrer">ノイマン型（Wikipedia）</a>も参照してください。
+            </p>
+            <p>
+                現代のほとんどのコンピュータは、このノイマン型アーキテクチャを基本としています。プログラムをデータと同様にメモリへ読み込んで実行するため、ソフトウェアを入れ替えるだけで多様な処理を行えるという、高い柔軟性と汎用性を実現しています。
+            </p>
+        </div>
+
+        <p style="text-align:center; margin-top: 2em;"><a href="index.html">問題一覧に戻る</a></p>
+    </main>
+    <footer>
+        <p></p>
+    </footer>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+</body>
+</html>

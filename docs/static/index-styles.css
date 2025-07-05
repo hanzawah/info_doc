@@ -1,0 +1,38 @@
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    margin: 2rem;
+    background-color: #FDFBF8;
+    color: #383A3D; /* 暗めのテキスト色で読みやすく */
+    line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #2D3748; /* 見出し色 */
+    margin-top: 1.5rem;
+    margin-bottom: 0.8rem;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 0.5rem;
+}
+
+a {
+    color: #007bff; /* 青系のリンク色 */
+    text-decoration: underline; /* 下線でリンクを強調 */
+    font-weight: 600; /* 太字でさらに明確に */
+}
+
+a:hover {
+    color: #0056b3; /* ホバー時の色 */
+    text-decoration: none; /* ホバー時は下線なし */
+} 
