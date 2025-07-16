@@ -1,1 +1,1 @@
-docs: FizzBuzz.pdfとexamディレクトリを追加
+docs: index.htmlのリンクと順序を修正
