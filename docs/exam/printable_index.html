@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>共通テスト「情報I」攻略のコツ（印刷用）</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font for better readability */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff; /* White background for printing */
+            color: #000000; /* Black text for printing */
+        }
+        .container {
+            max-width: 1024px;
+        }
+        h1, h2, h3, h4 {
+            font-weight: 700;
+            color: #000000;
+            break-after: avoid; /* Avoid page breaks after headings */
+        }
+        .tip-card {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem; /* Add space between sections */
+            border: 2px solid #e2e8f0; /* Simple border for printing */
+            page-break-inside: avoid; /* Avoid breaking cards across pages */
+        }
+        .tip-card h3 {
+            color: #000000;
+            margin-bottom: 0.75rem;
+        }
+        .tip-card ul {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            line-height: 1.6;
+        }
+        .tip-card li {
+            margin-bottom: 0.5rem;
+        }
+        .highlight {
+            background-color: #e5e7eb; /* Light gray highlight for printing */
+            padding: 0.1rem 0.4rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+        }
+        .section-heading {
+            border-bottom: 2px solid #cbd5e1;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            page-break-inside: avoid;
+        }
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th {
+            background-color: #f3f4f6; /* Light gray for table headers */
+            font-weight: 600;
+            color: #000000;
+        }
+        /* Hide footer when printing */
+        @media print {
+            footer {
+                display: none;
+            }
+            body {
+                font-size: 10pt; /* Adjust font size for printing */
+            }
+            .container {
+                box-shadow: none;
+                border: none;
+            }
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-6 md:p-8">
+    <div class="container mx-auto bg-white p-6 sm:p-8 md:p-10 rounded-2xl">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-4 text-blue-700">
+                共通テスト「情報I」攻略のコツ
+            </h1>
+        </header>
+
+        <section class="mb-10">
+            <!-- Section: はじめに -->
+            <div class="tip-card border-l-8 border-gray-500">
+                <h3 class="text-2xl sm:text-3xl font-bold text-gray-700">はじめに</h3>
+                <p class="text-gray-700 mb-4 leading-relaxed text-lg">
+                    このページでは、共通テスト「情報I」の攻略に役立つ実践的な「コツ」をご紹介します。（これらのコツは、他の共通テスト科目や日々の学習にも役立つかもしれません）
+                </p>
+
+                <ul class="list-disc pl-6 text-2xl font-semibold text-blue-700">
+                    <li class="mb-2">📊 図表の徹底活用</li>
+                    <li class="mb-2">❓ 問題の先読み</li>
+                    <li class="mb-2">🔍 スキミング・スキャニング</li>
+                    <li class="mb-2">✂️ カット＆ラベリング</li>
+                </ul>
+                <p class="text-gray-700 leading-relaxed text-center text-lg">
+                    これら4つのコツを意識して、効率的に学習を進めましょう！
+                </p>
+            </div>
+
+            <!-- Content sections are displayed sequentially -->
+
+            <!-- Section: 図表の徹底活用 -->
+            <div class="tip-card border-l-8 border-blue-500">
+                <h3 class="text-2xl sm:text-3xl font-bold">1. 図表の徹底活用：視覚情報を読み解く！</h3>
+                <p class="text-gray-700 mb-4 leading-relaxed">
+                    共通テストでは、図、グラフ、表など、<span class="highlight">視覚情報が非常に多く出題されます。</span>これらの図表は、問題作成者が用意した「問題の概略を掴む大ヒント」であり、<span class="highlight">図表からイメージを持つことで文章理解の大きな助けになります。</span>正確かつ迅速に読み解く力は、この科目で高得点を取るための鍵です。
+                </p>
+                <p class="text-gray-700 mb-4 leading-relaxed">
+                    図表の活用には、大きく分けて二つの見方があります。
+                </p>
+                <ul>
+                    <li><span class="font-semibold text-blue-600">図表の「概略を掴む」見方（さっと見る）</span>：
+                        <ul class="list-circle ml-6 mt-2">
+                            <li><strong>目的</strong>：問題全体のテーマや状況、主要な登場人物・要素、大まかな流れを把握する。問題作成者がどのような情報を視覚的に整理し、何を伝えたいのかを読み取ります。この段階で、<span class="highlight">選択肢よりも先に図表に目を通すことで、問題の全体像を素早く把握し、文章を読む際のイメージを形成し、概念マップを作る補助になります。</span></li>
+                            <li><strong>注目点</strong>：図表のタイトル（どんな図があるのかを把握）。</li>
+                        </ul>
+                    </li>
+                    <li><span class="font-semibold text-blue-600">図表の「詳細に内容検討する」見方</span>：
+                        <ul class="list-circle ml-6 mt-2">
+                            <li><strong>目的</strong>：設問の解答に必要な具体的な情報や、データの詳細な分析結果等を導き出す。</li>
+                            <li><strong>注目点</strong>：軸のラベル、凡例、全体の形状（例：グラフの山がどこにあるか）、大きな数値の変化、目立つパターンなど。特定のデータ点、正確な数値、単位、期間、比較対象間の具体的な差。</li>
+                            <li><span class="font-semibold text-blue-600">図表の「形」から読み取る</span>：単に図表の文字や数字を読むだけでなく、<span class="highlight">図やグラフの「形」「パターン」「傾向」そのものから意味を読み取る力</span>を養いましょう。例えば、グラフの傾きから変化の速さを読み取ったり、複数の棒グラフの高さの比較から直感的に大小関係を把握したりすることです。これは、文字情報に変換する前に、視覚的な情報そのものから直接的に洞察を得るスキルであり、情報Iで特に重要視されます。数学のデータ分析や統計的思考と連携します。</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Section: 問題の先読み -->
+            <div class="tip-card border-l-8 border-blue-500">
+                <h3 class="text-2xl sm:text-3xl font-bold">2. 問題の先読み：解答への道筋を立てる</h3>
+                <p class="text-gray-700 mb-4 leading-relaxed">
+                    長文（会話文などを含む）を読む前に、<span class="highlight">まず設問と選択肢に目を通しましょう。</span>これは、漫然と読むのではなく、「何を探すか」を明確にするための最も重要なステップです。何が問われているかを事前に把握することで、本文中で精読すべき箇所とそうでない箇所を判別でき、無駄な読み込みを避け、解答スピードを飛躍的に向上させます。
+                </p>
+                <ul>
+                    <li><span class="font-semibold text-blue-600">「目的志向型読解」を習慣に</span>：受動的に読むのではなく、「この情報を探すぞ！」という強い意識を持って本文に臨みましょう。脳は無意識のうちに不要な情報をフィルタリングし、必要な情報のみに集中するようになります。</li>
+                    <li><span class="font-semibold text-blue-600">問題文や選択肢へのマーキング</span>：設問や選択肢の重要なキーワード、条件、指示語などに線や丸をつけ、視覚的に目立たせましょう。これにより、読み飛ばしを防ぎ、後で本文を読む際に必要な情報を効率的に見つけ出すことができます。</li>
+                    <li><span class="font-semibold text-blue-600">問題のタイプを判断する</span>：設問を読んだ段階で、その問題が「知識だけで解けるか（本文中の情報が少ない、あるいは不要）」、それとも「本文や図表を詳細に読み解く必要があるか」を短時間で判断しましょう。この判断は、その後の文章を読む際の指針となり、読解の深さを調整するのに役立ちます。</li>
+                </ul>
+            </div>
+
+            <!-- Section: スキミング・スキャニング -->
+            <div class="tip-card border-l-8 border-blue-500">
+                <h3 class="text-2xl sm:text-3xl font-bold">3. スキミング・スキャニング：文章の全体像把握と情報抽出</h3>
+                <p class="text-gray-700 mb-4 leading-relaxed">
+                    スキミングとスキャニングは、長文読解の効率を飛躍的に高めるための強力なコンビネーションです。
+                </p>
+                <h4><span class="font-semibold text-blue-600">スキミング：文章の全体像を素早く把握する</span></h4>
+                <p class="text-gray-700 mb-4 leading-relaxed">
+                    スキミングは、文章全体を<span class="highlight">ざっと目を通して概要を理解する技術</span>です。全てを精読するのではなく、文章のテーマ、主要な論点、全体的な構成や流れを短時間で把握するのに役立ちます。この全体像の把握が、その後のスキャニングや精読の効率を大きく左右します。これは、英語長文で鍛える「ざっと読んで概要を掴む」技術や、国語の「論理構造の把握」に通じます。
+                </p>
+                <ul>
+                    <li><span class="font-semibold text-blue-600">注目ポイント</span>：各段落の冒頭文や結論部分、見出し、太字、箇条書き、図表のキャプション。</li>
+                    <li><span class="font-semibold text-blue-600">迷子防止</span>：詳細な情報を読み解く前に、どこにどのような情報が書かれているかの「情報マップ」を頭の中に構築しましょう。特に「情報I」の長文は、複数の情報源や複雑なプロセスが提示されることが多いため、全体像を掴むことでその後の効率的な読解につながります。</li>
+                </ul>
+
+                <h4 class="text-lg sm:text-xl font-bold mt-6 mb-3"><span class="font-semibold text-blue-600">スキャニング：必要な情報をピンポイントで探し出す</span></h4>
+                <p class="text-gray-700 mb-4 leading-relaxed">
+                    スキャニングは、設問に関連する<span class="highlight">特定のキーワードや情報だけを、本文中から素早く探し出す技術</span>です。細かい表や膨大なデータの中から、解答に必要な部分だけを見つけ出す際に極めて有効です。問題の先読みで得たキーワードを元に、本文中を高速で目で追っていきます。これは、英語リーディングで鍛える「特定の情報を探し出す」技術と共通します。
+                </p>
+                <ul>
+                    <li><span class="font-semibold text-blue-600">キーワードで高速拾い読み</span>：先に読んだ設問のキーワードを意識しながら、本文中を高速で「拾い読み」します。数字、固有名詞、専門用語、日付、単位、特定の記号、接続詞（例えば「しかし」「したがって「一方」など）に特に注目。</li>
+                    <li><span class="font-semibold text-blue-600">情報形式ごとのスキャン術</span>：
+                        <ul class="list-circle ml-6 mt-2">
+                            <li><strong>プログラムコード</strong>：特定の変数、関数名、特定の条件分岐（`もし〜ならば`）、ループ処理（`〜の間繰り返す`）の箇所。</li>
+                            <li><strong>図表</strong>：設問が求める特定のデータ点、変化量、最大値・最小値、特定の条件に合致する項目。</li>
+                        </ul>
+                    </li>
+                    <li><span class="font-semibold text-blue-600">スキミングとセットで使う</span>：まずスキミングで解答の根拠となる「場所」を特定し、その特定された部分のみを精読することで、時間効率と正確性を両立させます。</li>
+                </ul>
+
+                <h4 class="text-lg sm:text-xl font-bold mt-6 mb-3">表: スキミングとスキャニングの比較と使い分け</h4>
+                <div class="overflow-x-auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>特徴</th>
+                                <th>スキミング (Skimming)</th>
+                                <th>スキャニング (Scanning)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>目的</strong></td>
+                                <td>文章全体の概要把握、主要な論点の特定、情報マップの構築。</td>
+                                <td>設問に特化した特定の情報の検索、キーワードの発見、解答根拠の特定。</td>
+                            </tr>
+                            <tr>
+                                <td><strong>方法</strong></td>
+                                <td>段落の冒頭・結論、見出し、太字、図表のキャプションをざっと読む。</td>
+                                <td>設問のキーワードを意識し、本文中を高速で拾い読み。数字、固有名詞、専門用語、日付、特定の記号、接続詞に注目。</td>
+                            </tr>
+                            <tr>
+                                <td><strong>適用場面</strong></td>
+                                <td>長文の最初の読解、全体像を掴む必要がある時、複数の文章の中から読むべきものを選ぶ時。</td>
+                                <td>設問の解答根拠を探す時、図表から特定の値を見つける時、プログラムコードから特定の変数や処理を追う時。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Section: カット＆ラベリング -->
+            <div class="tip-card border-l-8 border-blue-500">
+                <h3 class="text-2xl sm:text-3xl font-bold">4. 「カット＆ラベリング」で情報を自分のものに！</h3>
+                <p class="text-gray-700 mb-4 leading-relaxed">
+                    長文読解において、全ての情報を記憶しようとするのは非効率的です。<span class="highlight">重要な部分を「切り出し」（特定し）、自分なりの「ラベル」（要約、キーワード、関連付け、簡単な図など）を付けて整理する</span>ことで、情報を自分のものとして再構築し、理解を深め、記憶を定着させます。これは、能動的な学習を促し、複雑な情報を整理する力を養います。国語で培われる「筆者の主張・意図の特定」「具体例と抽象論の区別」「事実と意見の区別」といった思考も、この情報整理に役立ちます。
+                </p>
+                <ul>
+                    <li><span class="font-semibold text-blue-600">「切り出す」思考</span>：文章の重要な部分（固有名詞、動詞、キーワード、筆者の主張、主要な出来事）を特定する。</li>
+                    <li><span class="font-semibold text-blue-600">「ラベル付け」思考</span>：特定した情報に、自分なりの要約、キーワード、関連付け、簡単な図などを付けて整理する。</li>
+                    <li><span class="font-semibold text-blue-600">問題用紙への直接メモ・マーキング術</span>：
+                        <p class="text-gray-700 mb-2">共通テスト本番では、問題用紙に直接書き込むことが許されています。<span class="highlight">問題文や図表を読みながら、効率的な情報処理のために以下のマーキング術を習慣にしましょう。</span></p>
+                        <ul class="list-circle ml-6 mt-2">
+                            <li><span class="font-semibold text-green-700">線引き（下線・波線）</span>：重要なキーワード、定義、筆者の主張、結論、条件、具体的な数値などに下線を引く。特に強調したい部分には波線を引く。</li>
+                            <li><span class="font-semibold text-green-700">丸囲み</span>：人名、固有名詞、専門用語、日付、単位、重要な数値など、後で探し出す可能性のある情報や、設問のキーワードを丸で囲む。</li>
+                            <li><span class="font-semibold text-green-700">矢印・囲み線</span>：情報の流れ、因果関係、対比関係を示す矢印を書き込む。関連する段落や情報を囲み線でグループ化する。</li>
+                            <li><span class="font-semibold text-green-700">記号の活用</span>：
+                                <ul class="list-square ml-6 mt-1">
+                                    <li><span class="font-semibold">☆</span>：特に重要、後で見直す必要のある箇所</li>
+                                    <li><span class="font-semibold">？</span>：疑問点、不明な点</li>
+                                    <li><span class="font-semibold">→</span>：因果関係、流れ</li>
+                                    <li><span class="font-semibold">対</span>：対比、比較</li>
+                                </ul>
+                            </li>
+                            <li><span class="font-semibold text-green-700">余白へのメモ</span>：各段落の要約、プログラムコードの変数変化、図表の傾向分析などを簡潔に書き込む。選択肢の消去法や、計算過程などもメモとして残す。</li>
+                            <li><span class="font-semibold text-green-700">色分けについて</span>：共通テスト本番では色ペンは使えませんが、<span class="highlight">練習段階では積極的に色分けを活用し、情報の種類や重要度を視覚的に区別する習慣をつけましょう。</span>本番では、異なる種類の線（一本線、二本線、波線など）や、丸、四角、星などのシンプルな記号を使い分けることで、色分けの代わりとすることができます。</li>
+                        </ul>
+                        <p class="text-gray-600 text-sm mt-2">
+                            ※共通テストではマークシートへの記入に影響が出ないよう、必要最低限のメモに留めましょう。
+                        </p>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Section: まとめ -->
+            <div class="tip-card border-l-8 border-gray-500">
+                <h3 class="text-2xl sm:text-3xl font-bold text-gray-700">まとめ</h3>
+                <p class="text-gray-700 mb-4 leading-relaxed">
+                    共通テスト「情報I」の長文問題は、単なる知識の有無を問うだけでなく、複雑な情報を効率的に処理し、論理的に思考し、判断を下す総合的な能力を試すものです。この科目は、現代社会で求められる情報活用能力を測る試金石と言えます。
+                </p>
+                <p class="text-gray-700 mb-4 leading-relaxed">
+                    高得点獲得の鍵は、図表を真っ先に徹底活用し、次に問題の先読みで問われることを明確にし、スキミング・スキャニングで文章全体の概要把握と必要な情報の抽出を行い、カット＆ラベリングで能動的に情報を整理・理解することです。
+                </p>
+                <p class="text-gray-700 mb-4 leading-relaxed">
+                    特に、問題用紙への適切なマーキングやメモ術は、内容理解を深め、記憶を定着させる上で強力な武器となります。これは、単なる情報の羅列ではなく、自分なりの意味付けと構造化を促す学習法です。
+                </p>
+                <p class="text-gray-700 leading-relaxed">
+                    これらの「コツ」を実践し、試行錯誤を繰り返すことで、必ず「情報I」の長文問題を攻略できます。基礎知識の定着と、応用力養成の両面から対策を進め、志望校合格を掴み取りましょう！
+                </p>
+            </div>
+        </section>
+
+        <footer class="text-center mt-10 p-6 bg-blue-100 rounded-xl text-blue-800">
+        </footer>
+    </div>
+</body>
+</html>
