@@ -1,1 +1,0 @@
-docs: j28_system_makeへのリンクを追加
