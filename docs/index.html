@@ -4,57 +4,188 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>情報科資料等（共通試験対策他）</title>
-    <link rel="stylesheet" href="static/index-styles.css">
+    <!-- Tailwind CSSを読み込みます -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Inter) を読み込みます -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 日本語はNoto Sans JP、英数字はInterを使用します */
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+        }
+    </style>
 </head>
-<body>
-    <h1>情報科資料等（共通試験対策他）</h1>
-    <p>以下のリンクから各資料にアクセスしてください。</p>
-    <ul>
-        <li><h3>共通テスト対策</h3></li>
-        <li><a href="exam/index.html">共通テスト情報のコツ</a></li>
-        <br>
-        <li><h3>2025年度 資料</h3></li>
-        <li><a href="center2025/%E5%B0%BA%E5%BA%A6%E6%B0%B4%E6%BA%96%E8%AA%AC%E6%98%8E.html">尺度水準説明 (HTML)</a></li>
-        <li><a href="center2025/%E5%85%B1%E3%83%862025%E5%A4%A7%E5%95%8F%EF%BC%94.pdf">共テ2025大問４ (PDF)</a></li>
-        <li><a href="center2025/jouhou-1_%E8%A7%A3%E8%AA%AC.pdf">情報Ⅰ 解説 (PDF)</a></li>
-        <li><a href="center2025/jouhou1.pdf">情報Ⅰ (PDF)</a></li>
-        <br>
-        <li><h3>2024年度 資料</h3></li>
-        <li><a href="center2024/index.html">共通テスト2024年度本試問題</a>
-            <ul>
-                <li><a href="center2024/guide_2024center1_3.html">第一問問３（グレー画像と隠し文字）解説</a></li>
-            </ul>
-        </li>
-        <br>
-        <li><h3>2023年度 資料</h3></li>
-        <li><a href="a2023/index.html">共通テスト２０２３年度追試問題</a>
-            <ul>
-                <li><a href="a2023/第一問/index.html">第一問：情報社会とデータ表現</a></li>
-                <li><a href="a2023/第二問/index.html">第二問：グラフ理論と情報ネットワーク</a></li>
-                <li><a href="a2023/第三問/index.html">第三問：アルゴリズムとデータ構造（スケジューリング問題）</a></li>
-                <li><a href="a2023/第四問/index.html">第四問：表計算ソフトの活用</a></li>
-            </ul>
-        </li>
-        <br>
-        <li><h3>2012年度 資料</h3></li>
-        <li><a href="center2012/%E3%82%BB%E3%83%B3%E3%82%BF%E3%83%BC%EF%BC%92%EF%BC%90%EF%BC%91%EF%BC%92%E5%B9%B4%E5%BA%A6%E3%81%AE%E8%AA%AC%E6%98%8E%E4%BE%8B.html">2012年度 情報関係基礎 説明例 (HTML)</a></li>
-        <li><a href="center2012/%E6%83%85%E5%A0%B1%E9%96%A2%E4%BF%82%E5%9F%BA%E7%A4%8E2012%E6%9C%AC%E8%A9%A6%E9%A8%93F%E5%95%8F%E9%A1%8C%E4%BD%9C%E6%88%90%E9%83%A8%E4%BC%9A%E3%81%AE%E8%A6%8B%E8%A7%A3.pdf">2012年度 情報関係基礎 本試験F問題作成部会の見解 (PDF)</a></li>
-        <li><a href="center2012/%E6%83%85%E5%A0%B1%E9%96%A2%E4%BF%82%E5%9F%BA%E7%A4%8E2012%E6%9C%AC%E8%A9%A6%E9%A8%93F%E6%AD%A3%E7%AD%94.pdf">2012年度 情報関係基礎 本試験F正答 (PDF)</a></li>
-        <li><a href="center2012/%E6%83%85%E5%A0%B1%E9%96%A2%E4%BF%82%E5%9F%BA%E7%A4%8E2012%E6%9C%AC%E8%A9%A6%E9%A8%93F%E5%95%8F%E9%A1%8C.pdf">2012年度 情報関係基礎 本試験F問題 (PDF)</a></li>
-        <br>
-        <li><h3>生成AI資料</h3></li>
-        <li><a href="basic_ai/index.html">生成AI基本活用</a></li>
-    </ul>
-    <ul>
-        <li><h3>情報関連数学</h3></li>
-        <li><a href="info-math/index.html">情報関連数学の基礎</a></li>
-        <li><a href="info-math/bin-dec-conversion.html">二進数体験シミュレーター</a></li>
-    </ul>
-    <ul>
-        <li><h3>実践問題</h3></li>
-        <li><a href="j28_system_make/index.html">実践問題：システムの構成</a></li>
-        <li><a href="j30_cpu/index.html">実践問題：CPU（五大装置、ノイマン型他）</a></li>
-        <li><a href="FizzBuzz/index.html">実践問題FizzBuzzで</a></li>
-    </ul>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- 全体を囲むコンテナ -->
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-5xl">
+
+        <!-- ヘッダー -->
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">情報科資料等</h1>
+            <p class="mt-2 text-lg text-gray-600">共通試験対策、各種資料</p>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="space-y-8">
+
+            <!-- カードセクションのコンテナ -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                <!-- 共通テスト対策 カード -->
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <h2 class="text-2xl font-bold mb-4 border-b pb-2 text-blue-700">共通テスト対策</h2>
+                    <ul class="space-y-3">
+                        <li><a href="exam/index.html" class="flex items-center text-blue-600 hover:text-blue-800 hover:underline">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-blue-500"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                            <span>共通テスト情報のコツ</span>
+                        </a></li>
+                    </ul>
+                </div>
+
+                <!-- 生成AI資料 カード -->
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <h2 class="text-2xl font-bold mb-4 border-b pb-2 text-purple-700">生成AI資料</h2>
+                    <ul class="space-y-3">
+                        <li><a href="basic_ai/index.html" class="flex items-center text-purple-600 hover:text-purple-800 hover:underline">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-purple-500"><path d="M12 8V4H8"></path><path d="M8 8.92A4.6 4.6 0 0 1 12 4.5h0"></path><path d="M16 15.08A4.6 4.6 0 0 1 12 19.5h0"></path><path d="M12 16v4h4"></path><path d="m16 12-4 4-4-4"></path><path d="m8 12 4-4 4 4"></path></svg>
+                            <span>生成AI基本活用</span>
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 年度別資料 -->
+            <div class="space-y-8">
+                <!-- 2025年度 資料 カード -->
+                <section class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <h2 class="text-2xl font-bold mb-4 border-b pb-2 text-gray-800">2025年度 資料</h2>
+                    <ul class="space-y-3 list-inside">
+                        <li><a href="center2025/%E5%B0%BA%E5%BA%A6%E6%B0%B4%E6%BA%96%E8%AA%AC%E6%98%8E.html" class="flex items-center text-gray-700 hover:text-black hover:underline">
+                            <span class="inline-block bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">HTML</span>
+                            尺度水準説明
+                        </a></li>
+                        <li><a href="center2025/%E5%85%B1%E3%83%862025%E5%A4%A7%E5%95%8F%EF%BC%94.pdf" class="flex items-center text-gray-700 hover:text-black hover:underline">
+                            <span class="inline-block bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">PDF</span>
+                            共テ2025大問４
+                        </a></li>
+                        <li><a href="center2025/jouhou-1_%E8%A7%A3%E8%AA%AC.pdf" class="flex items-center text-gray-700 hover:text-black hover:underline">
+                            <span class="inline-block bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">PDF</span>
+                            情報Ⅰ 解説
+                        </a></li>
+                        <li><a href="center2025/jouhou1.pdf" class="flex items-center text-gray-700 hover:text-black hover:underline">
+                            <span class="inline-block bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">PDF</span>
+                            情報Ⅰ
+                        </a></li>
+                    </ul>
+                </section>
+
+                <!-- 2024年度 資料 カード -->
+                <section class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <h2 class="text-2xl font-bold mb-4 border-b pb-2 text-gray-800">2024年度 資料</h2>
+                    <ul class="space-y-3 list-inside">
+                        <li>
+                            <a href="center2024/index.html" class="flex items-center text-gray-700 hover:text-black hover:underline">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-gray-500"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                                <span>共通テスト2024年度本試問題</span>
+                            </a>
+                            <ul class="mt-2 pl-8 space-y-2 list-disc list-inside">
+                                <li><a href="center2024/guide_2024center1_3.html" class="text-gray-600 hover:text-black hover:underline">第一問問３（グレー画像と隠し文字）解説</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <!-- 2023年度 資料 カード -->
+                <section class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <h2 class="text-2xl font-bold mb-4 border-b pb-2 text-gray-800">2023年度 資料</h2>
+                    <ul class="space-y-3 list-inside">
+                        <li>
+                            <a href="a2023/index.html" class="flex items-center text-gray-700 hover:text-black hover:underline">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-gray-500"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                                <span>共通テスト２０２３年度追試問題</span>
+                            </a>
+                            <ul class="mt-2 pl-8 space-y-2 list-disc list-inside marker:text-gray-400">
+                                <li><a href="a2023/第一問/index.html" class="text-gray-600 hover:text-black hover:underline">第一問：情報社会とデータ表現</a></li>
+                                <li><a href="a2023/第二問/index.html" class="text-gray-600 hover:text-black hover:underline">第二問：グラフ理論と情報ネットワーク</a></li>
+                                <li><a href="a2023/第三問/index.html" class="text-gray-600 hover:text-black hover:underline">第三問：アルゴリズムとデータ構造</a></li>
+                                <li><a href="a2023/第四問/index.html" class="text-gray-600 hover:text-black hover:underline">第四問：表計算ソフトの活用</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <!-- 2012年度 資料 カード -->
+                <section class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <h2 class="text-2xl font-bold mb-4 border-b pb-2 text-gray-800">2012年度 資料</h2>
+                    <ul class="space-y-3 list-inside">
+                        <li><a href="center2012/%E3%82%BB%E3%83%B3%E3%82%BF%E3%83%BC%EF%BC%92%EF%BC%90%EF%BC%91%EF%BC%92%E5%B9%B4%E5%BA%A6%E3%81%AE%E8%AA%AC%E6%98%8E%E4%BE%8B.html" class="flex items-center text-gray-700 hover:text-black hover:underline">
+                            <span class="inline-block bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">HTML</span>
+                            2012年度 情報関係基礎 説明例
+                        </a></li>
+                        <li><a href="center2012/%E6%83%85%E5%A0%B1%E9%96%A2%E4%BF%82%E5%9F%BA%E7%A4%8E2012%E6%9C%AC%E8%A9%A6%E9%A8%93F%E5%95%8F%E9%A1%8C%E4%BD%9C%E6%88%90%E9%83%A8%E4%BC%9A%E3%81%AE%E8%A6%8B%E8%A7%A3.pdf" class="flex items-center text-gray-700 hover:text-black hover:underline">
+                            <span class="inline-block bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">PDF</span>
+                            2012年度 情報関係基礎 本試験F問題作成部会の見解
+                        </a></li>
+                        <li><a href="center2012/%E6%83%85%E5%A0%B1%E9%96%A2%E4%BF%82%E5%9F%BA%E7%A4%8E2012%E6%9C%AC%E8%A9%A6%E9%A8%93F%E6%AD%A3%E7%AD%94.pdf" class="flex items-center text-gray-700 hover:text-black hover:underline">
+                            <span class="inline-block bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">PDF</span>
+                            2012年度 情報関係基礎 本試験F正答
+                        </a></li>
+                        <li><a href="center2012/%E6%83%85%E5%A0%B1%E9%96%A2%E4%BF%82%E5%9F%BA%E7%A4%8E2012%E6%9C%AC%E8%A9%A6%E9%A8%93F%E5%95%8F%E9%A1%8C.pdf" class="flex items-center text-gray-700 hover:text-black hover:underline">
+                            <span class="inline-block bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">PDF</span>
+                            2012年度 情報関係基礎 本試験F問題
+                        </a></li>
+                    </ul>
+                </section>
+            </div>
+
+            <!-- その他のカテゴリ -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- 情報関連数学 カード -->
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <h2 class="text-2xl font-bold mb-4 border-b pb-2 text-teal-700">情報関連数学</h2>
+                    <ul class="space-y-3">
+                        <li><a href="info-math/index.html" class="flex items-center text-teal-600 hover:text-teal-800 hover:underline">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-teal-500"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                            <span>情報関連数学の基礎</span>
+                        </a></li>
+                        <li><a href="info-math/bin-dec-conversion.html" class="flex items-center text-teal-600 hover:text-teal-800 hover:underline">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-teal-500"><rect x="14" y="14" width="8" height="8" rx="2" ry="2"></rect><rect x="2" y="2" width="8" height="8" rx="2" ry="2"></rect><line x1="6" y1="14" x2="6" y2="18"></line><line x1="18" y1="6" x2="18" y2="10"></line></svg>
+                            <span>二進数体験シミュレーター</span>
+                        </a></li>
+                    </ul>
+                </div>
+
+                <!-- 実践問題 カード -->
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <h2 class="text-2xl font-bold mb-4 border-b pb-2 text-orange-700">実践問題</h2>
+                    <ul class="space-y-3">
+                        <li><a href="j28_system_make/index.html" class="flex items-center text-orange-600 hover:text-orange-800 hover:underline">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-orange-500"><path d="M12.22 2h-4.44a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.38"></path><path d="M16 2l6 6h-6V2z"></path></svg>
+                            <span>実践問題：システムの構成</span>
+                        </a></li>
+                        <li><a href="j30_cpu/index.html" class="flex items-center text-orange-600 hover:text-orange-800 hover:underline">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-orange-500"><path d="M12.22 2h-4.44a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.38"></path><path d="M16 2l6 6h-6V2z"></path></svg>
+                            <span>実践問題：CPU（五大装置、ノイマン型他）</span>
+                        </a></li>
+                        <li><a href="FizzBuzz/index.html" class="flex items-center text-orange-600 hover:text-orange-800 hover:underline">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-orange-500"><path d="M12.22 2h-4.44a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.38"></path><path d="M16 2l6 6h-6V2z"></path></svg>
+                            <span>実践問題：FizzBuzz</span>
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- フッター -->
+        <footer class="text-center mt-12 py-4 border-t">
+            <p class="text-sm text-gray-500">&copy; 2024 情報科資料. All rights reserved.</p>
+        </footer>
+
+    </div>
+
 </body>
-</html> 
+</html>
