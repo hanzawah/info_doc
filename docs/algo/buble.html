@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>インタラクティブ・バブルソート学習サイト</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Learning -->
+    <!-- Application Structure Plan: このSPAは、学習者が概念を段階的に構築できるよう、教育的なフローに基づいて設計されています。1.「はじめに」で概要と比喩を提示。2.「ビジュアライザ」で中心的なインタラクティブ体験を提供し、視覚とコードを結びつけます。3.「計算量」セクションで、インタラクティブなグラフを用いてO(N^2)の概念を体感させます。4.「最適化」で、改善手法を具体的に探求させます。5.「他のアルゴリズムとの比較」で、バブルソートをより広い文脈で位置づけます。6.「理解度チェック」で学習を定着させます。この構造は、レポートの情報を一方的に提示するのではなく、学習者が自ら発見し、試行錯誤できる対話的な学習環境を作り出すことを目的としています。 -->
+    <!-- Visualization & Content Choices: 1. アルゴリズムの動作 (Goal: Inform/Demonstrate) -> Chart.jsによるインタラクティブな棒グラフアニメーション (Viz/Presentation) -> データ数、速度、最適化の選択、ステップ実行 (Interaction) -> 抽象的な交換プロセスを具体的で追跡可能な視覚体験に変えるため (Justification) -> Chart.js/Canvas (Library/Method)。 2. 計算量 (Goal: Explain/Compare) -> Chart.jsによるNと計算量を比較する動的な線グラフ (Viz/Presentation) -> スライダーでNの値を変更 (Interaction) -> O(N^2)という抽象的な概念を、入力サイズの増加に対する処理時間の急増として視覚的に体感させるため (Justification) -> Chart.js/Canvas (Library/Method)。 3. 最適化 (Goal: Organize/Compare) -> タブ形式のUIとコードスニペット (Viz/Presentation) -> タブ切り替え、メインビジュアライザでの設定反映 (Interaction) -> 各最適化手法の違いと効果を明確に分離し、比較検討しやすくするため (Justification) -> HTML/CSS/JS (Method)。 4. アルゴリズム比較 (Goal: Compare/Organize) -> ソート可能なHTMLテーブル (Viz/Presentation) -> テーブルヘッダーでのソート (Interaction) -> 各アルゴリズムの特性を一覧で比較し、バブルソートの長所と短所を客観的に理解させるため (Justification) -> HTML/JS (Method)。 -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { font-family: 'Noto Sans JP', sans-serif; background-color: #FDFBF6; color: #3C3633; }
+        .chart-container { position: relative; width: 100%; max-width: 800px; margin-left: auto; margin-right: auto; height: 300px; max-height: 50vh; }
+        @media (min-width: 768px) { .chart-container { height: 400px; } }
+        .nav-link { transition: color 0.3s, border-bottom-color 0.3s; }
+        .nav-link:hover, .nav-link.active { color: #799351; border-bottom-color: #799351; }
+        .control-button { transition: background-color 0.3s, transform 0.1s; }
+        .control-button:active { transform: scale(0.95); }
+        .tab-button.active { background-color: #A1C398; color: #FDFBF6; }
+        .code-line { transition: background-color 0.3s; padding: 2px 8px; border-radius: 4px; }
+        .highlight { background-color: #A1C398; color: white; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-[#F0EBE3]/80 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <h1 class="text-2xl font-bold text-[#799351]">バブルソートを学ぶ</h1>
+                <div class="hidden md:flex space-x-6 text-lg">
+                    <a href="#intro" class="nav-link border-b-2 border-transparent pb-1">はじめに</a>
+                    <a href="#visualizer" class="nav-link border-b-2 border-transparent pb-1">体験する</a>
+                    <a href="#complexity" class="nav-link border-b-2 border-transparent pb-1">計算量</a>
+                    <a href="#optimization" class="nav-link border-b-2 border-transparent pb-1">最適化</a>
+                    <a href="#comparison" class="nav-link border-b-2 border-transparent pb-1">比較</a>
+                    <a href="#quiz" class="nav-link border-b-2 border-transparent pb-1">理解度チェック</a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden text-2xl">☰</button>
+            </div>
+            <div id="mobile-menu" class="hidden md:hidden flex-col space-y-2 pb-4">
+                 <a href="#intro" class="nav-link block text-center py-2">はじめに</a>
+                 <a href="#visualizer" class="nav-link block text-center py-2">体験する</a>
+                 <a href="#complexity" class="nav-link block text-center py-2">計算量</a>
+                 <a href="#optimization" class="nav-link block text-center py-2">最適化</a>
+                 <a href="#comparison" class="nav-link block text-center py-2">比較</a>
+                 <a href="#quiz" class="nav-link block text-center py-2">理解度チェック</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 md:py-12">
+
+        <section id="intro" class="mb-16 scroll-mt-24">
+            <h2 class="text-3xl font-bold text-center mb-6 text-[#799351]">1. はじめに：バブルソートとは？</h2>
+            <div class="max-w-3xl mx-auto bg-white/50 p-6 rounded-lg shadow-md">
+                <p class="text-lg leading-relaxed mb-4">
+                    バブルソートは、たくさんのソートアルゴリズムの中でも、最もシンプルで理解しやすいアルゴリズムの一つです。プログラミング学習の第一歩として、アルゴリズムの基本的な考え方（「比較」と「交換」）を学ぶのに最適です。
+                </p>
+                <p class="text-lg leading-relaxed">
+                    名前の由来は、水中の泡（バブル）が水面に上がっていく様子に似ていることから来ています。このアルゴリズムでは、隣り合う2つの要素を比べて、もし順序が逆だったら場所を交換します。この操作を何度も繰り返すことで、一番大きい（または小さい）要素が、まるで泡のように配列の端に「浮かび上がって」いくのです。このセクションでは、その基本的な仕組みと考え方を学びます。
+                </p>
+            </div>
+        </section>
+
+        <section id="visualizer" class="mb-16 scroll-mt-24">
+            <h2 class="text-3xl font-bold text-center mb-6 text-[#799351]">2. 体験する：バブルソートの動きを見る</h2>
+            <p class="text-center max-w-3xl mx-auto mb-8">
+                ここでは、バブルソートが実際にどのように動くのかを、アニメーションで体験できます。データ数や速度を調整したり、自分でデータを入力して、アルゴリズムの動きを観察してみましょう。右側のコードのどの部分が実行されているかもハイライトで表示されます。
+            </p>
+            <div class="bg-white/50 p-4 md:p-6 rounded-lg shadow-lg">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2">
+                        <div class="chart-container bg-gray-100 rounded-md">
+                            <canvas id="sortChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-[#F0EBE3] p-4 rounded-md">
+                        <h4 class="font-bold mb-2 text-center">Python コード</h4>
+                        <pre class="text-sm bg-gray-800 text-white p-3 rounded-md overflow-x-auto"><code id="code-display">
+<span id="code-line-0" class="code-line">def bubble_sort(arr):</span>
+<span id="code-line-1" class="code-line">  n = len(arr)</span>
+<span id="code-line-2" class="code-line">  for i in range(n):</span>
+<span id="code-line-3" class="code-line">    swapped = False</span>
+<span id="code-line-4" class="code-line">    for j in range(0, n - i - 1):</span>
+<span id="code-line-5" class="code-line">      if arr[j] > arr[j + 1]:</span>
+<span id="code-line-6" class="code-line">        arr[j], arr[j+1] = arr[j+1], arr[j]</span>
+<span id="code-line-7" class="code-line">        swapped = True</span>
+<span id="code-line-8" class="code-line">    if not swapped:</span>
+<span id="code-line-9" class="code-line">      break</span>
+<span id="code-line-10" class="code-line">  return arr</span>
+                        </code></pre>
+                        <div id="explanation-box" class="mt-4 p-3 bg-white rounded-md text-sm h-24">
+                            操作を開始してください。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-center">
+                    <div>
+                        <label for="dataSize" class="block text-sm font-medium">データ数: <span id="dataSizeValue">15</span></label>
+                        <input id="dataSize" type="range" min="5" max="50" value="15" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                    <div>
+                        <label for="speed" class="block text-sm font-medium">速度: <span id="speedValue">200</span>ms</label>
+                        <input id="speed" type="range" min="10" max="1000" value="200" step="10" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="optimizationToggle" class="h-4 w-4 rounded border-gray-300 text-[#799351] focus:ring-[#A1C398]">
+                        <label for="optimizationToggle" class="text-sm font-medium">最適化を有効化</label>
+                    </div>
+                     <div class="flex justify-center items-center space-x-2">
+                        <button id="sortBtn" class="control-button bg-[#799351] text-white font-bold py-2 px-4 rounded-lg">ソート開始</button>
+                        <button id="resetBtn" class="control-button bg-[#A1C398] text-white font-bold py-2 px-4 rounded-lg">リセット</button>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center space-x-2">
+                    <input type="checkbox" id="stepByStepModeToggle" class="h-4 w-4 rounded border-gray-300 text-[#799351] focus:ring-[#A1C398]">
+                    <label for="stepByStepModeToggle" class="text-sm font-medium">ステップ実行モード</label>
+                    <button id="prevStepBtn" class="control-button bg-[#F5C7A9] text-white font-bold py-2 px-4 rounded-lg" disabled>前のステップ</button>
+                    <button id="nextStepBtn" class="control-button bg-[#F5C7A9] text-white font-bold py-2 px-4 rounded-lg" disabled>次のステップ</button>
+                </div>
+                 <div class="mt-4">
+                    <label for="customData" class="block text-sm font-medium">カスタムデータ (カンマ区切り):</label>
+                    <div class="flex space-x-2">
+                        <input type="text" id="customData" placeholder="例: 5,3,8,1,9" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        <button id="applyCustomDataBtn" class="control-button bg-[#799351] text-white font-bold py-2 px-4 rounded-lg whitespace-nowrap">適用</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="complexity" class="mb-16 scroll-mt-24">
+            <h2 class="text-3xl font-bold text-center mb-6 text-[#799351]">3. なぜ遅いの？ 計算量 O(N²) を知る</h2>
+            <div class="max-w-4xl mx-auto bg-white/50 p-6 rounded-lg shadow-md">
+                <p class="text-lg leading-relaxed mb-4">
+                    バブルソートはシンプルですが、データが多くなると急激に遅くなるという特徴があります。これを「計算量がO(N²)である」と表現します。Nはデータの数です。これは、データ数が2倍になると、処理にかかる時間（比較回数）が約4倍（2の2乗）になることを意味します。
+                </p>
+                <p class="text-lg leading-relaxed mb-6">
+                    下のスライダーを動かしてデータ数(N)を増やしてみてください。比較回数がどのように増えていくか、グラフで体感できます。
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                    <div>
+                        <div class="chart-container bg-gray-100 rounded-md" style="height: 300px;">
+                            <canvas id="complexityChart"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="complexityN" class="block text-lg font-medium text-center">データ数 (N): <span id="complexityNValue">10</span></label>
+                        <input id="complexityN" type="range" min="2" max="100" value="10" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer mt-4">
+                        <div class="mt-6 text-center bg-[#F0EBE3] p-4 rounded-lg">
+                            <p class="text-lg">比較回数 (最悪の場合):</p>
+                            <p id="comparisonCount" class="text-3xl font-bold text-[#799351]">45</p>
+                            <p class="text-sm text-gray-600">(N * (N - 1) / 2)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="optimization" class="mb-16 scroll-mt-24">
+            <h2 class="text-3xl font-bold text-center mb-6 text-[#799351]">4. どう改善する？ バブルソートの最適化</h2>
+             <p class="text-center max-w-3xl mx-auto mb-8">
+                基本的なバブルソートは非効率ですが、少し工夫するだけで性能を改善できます。ここでは代表的な2つの最適化手法を紹介します。上のビジュアライザで「最適化を有効化」にチェックを入れると、これらの手法が適用された動きを確認できます。
+            </p>
+            <div class="max-w-4xl mx-auto bg-white/50 p-6 rounded-lg shadow-md">
+                <div class="mb-4 border-b border-gray-200">
+                    <nav class="flex -mb-px" aria-label="Tabs">
+                        <button class="tab-button active w-1/2 py-4 px-1 text-center border-b-2 font-medium text-lg" data-tab="opt1">
+                            最適化1: 早期終了
+                        </button>
+                        <button class="tab-button w-1/2 py-4 px-1 text-center border-b-2 font-medium text-lg" data-tab="opt2">
+                            最適化2: ソート範囲の縮小
+                        </button>
+                    </nav>
+                </div>
+                <div id="opt1" class="tab-content">
+                    <h4 class="text-xl font-bold mb-2">早期終了 (Early Termination)</h4>
+                    <p class="mb-4">もし、あるパス（配列の最初から最後までの一回の走査）で一度も交換が行われなかったら、それは配列がすでに完全にソートされていることを意味します。その時点でソート処理を終了することで、不要な比較を省くことができます。特に、ほとんどソート済みのデータに対して非常に効果的です。</p>
+                    <pre class="text-sm bg-gray-800 text-white p-3 rounded-md overflow-x-auto"><code>
+def bubble_sort_optimized_1(arr):
+    n = len(arr)
+    for i in range(n):
+        swapped = False  # 交換フラグ
+        for j in range(0, n - 1):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j+1] = arr[j+1], arr[j]
+                swapped = True
+        if not swapped:  # 交換がなければループを抜ける
+            break
+    return arr
+                    </code></pre>
+                </div>
+                <div id="opt2" class="tab-content hidden">
+                    <h4 class="text-xl font-bold mb-2">ソート範囲の縮小</h4>
+                    <p class="mb-4">1回のパスが完了すると、その時点で未ソート部分の最大値が配列の正しい位置に確定します。つまり、次のパスでは、その確定した要素を比較対象から外すことができます。パスごとに比較する範囲を一つずつ狭めていくことで、全体の比較回数を減らすことができます。</p>
+                     <pre class="text-sm bg-gray-800 text-white p-3 rounded-md overflow-x-auto"><code>
+def bubble_sort_optimized_2(arr):
+    n = len(arr)
+    for i in range(n):
+        # ループの範囲が n - i - 1 となっている
+        for j in range(0, n - i - 1):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j+1] = arr[j+1], arr[j]
+    return arr
+                    </code></pre>
+                    <p class="mt-4 text-sm text-gray-600">※注: 2つの最適化は、体験セクションの「最適化を有効化」チェックボックスで同時に適用されます。コードは統合されたものが使われています。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="comparison" class="mb-16 scroll-mt-24">
+            <h2 class="text-3xl font-bold text-center mb-6 text-[#799351]">5. 他のアルゴリズムとの比較</h2>
+            <p class="text-center max-w-3xl mx-auto mb-8">
+                バブルソートはアルゴリズム学習の入り口です。世の中にはもっと高速で効率的なソートアルゴリズムがたくさんあります。それぞれのアルゴリズムがどのような特徴を持つのかを知ることで、状況に応じて最適な手法を選択する力が身につきます。
+            </p>
+            <div class="max-w-5xl mx-auto bg-white/50 p-6 rounded-lg shadow-md overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-[#A1C398] text-white">
+                            <th class="p-3 font-bold uppercase">アルゴリズム名</th>
+                            <th class="p-3 font-bold uppercase">平均計算量</th>
+                            <th class="p-3 font-bold uppercase">最悪計算量</th>
+                            <th class="p-3 font-bold uppercase">安定性</th>
+                            <th class="p-3 font-bold uppercase">特徴</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr class="bg-white hover:bg-gray-50">
+                            <td class="p-3 font-bold">バブルソート</td>
+                            <td class="p-3">O(N²)</td>
+                            <td class="p-3">O(N²)</td>
+                            <td class="p-3">安定</td>
+                            <td class="p-3">実装が簡単。教育用に最適。</td>
+                        </tr>
+                        <tr class="bg-gray-50 hover:bg-gray-100">
+                            <td class="p-3 font-bold">選択ソート</td>
+                            <td class="p-3">O(N²)</td>
+                            <td class="p-3">O(N²)</td>
+                            <td class="p-3">不安定</td>
+                            <td class="p-3">交換回数が少ない。</td>
+                        </tr>
+                        <tr class="bg-white hover:bg-gray-50">
+                            <td class="p-3 font-bold">挿入ソート</td>
+                            <td class="p-3">O(N²)</td>
+                            <td class="p-3">O(N²)</td>
+                            <td class="p-3">安定</td>
+                            <td class="p-3">ほぼソート済みのデータに高速。</td>
+                        </tr>
+                        <tr class="bg-gray-50 hover:bg-gray-100">
+                            <td class="p-3 font-bold">マージソート</td>
+                            <td class="p-3">O(N log N)</td>
+                            <td class="p-3">O(N log N)</td>
+                            <td class="p-3">安定</td>
+                            <td class="p-3">どのようなデータでも安定して高速。</td>
+                        </tr>
+                        <tr class="bg-white hover:bg-gray-50">
+                            <td class="p-3 font-bold">クイックソート</td>
+                            <td class="p-3">O(N log N)</td>
+                            <td class="p-3">O(N²)</td>
+                            <td class="p-3">不安定</td>
+                            <td class="p-3">一般的に最も高速だが、最悪の場合がある。</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="quiz" class="scroll-mt-24">
+            <h2 class="text-3xl font-bold text-center mb-6 text-[#799351]">6. 理解度チェック</h2>
+            <div id="quiz-container" class="max-w-3xl mx-auto bg-white/50 p-6 rounded-lg shadow-md">
+                
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-[#F0EBE3] mt-16 py-6">
+        <div class="container mx-auto text-center text-gray-600">
+            <p>&copy; 2025 インタラクティブ・バブルソート学習サイト</p>
+        </div>
+    </footer>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Smooth scrolling and active nav link
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href');
+                    document.querySelector(targetId).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    if(mobileMenu.classList.contains('flex')){
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+            
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 120) {
+                        current = '#' + section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+
+            // Tab functionality for optimization section
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    const tabId = button.dataset.tab;
+                    tabContents.forEach(content => {
+                        if (content.id === tabId) {
+                            content.classList.remove('hidden');
+                        } else {
+                            content.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            // Main visualizer logic
+            const sortChartCanvas = document.getElementById('sortChart');
+            const dataSizeSlider = document.getElementById('dataSize');
+            const dataSizeValue = document.getElementById('dataSizeValue');
+            const speedSlider = document.getElementById('speed');
+            const speedValue = document.getElementById('speedValue');
+            const sortBtn = document.getElementById('sortBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const optimizationToggle = document.getElementById('optimizationToggle');
+            const explanationBox = document.getElementById('explanation-box');
+            const codeDisplay = document.getElementById('code-display');
+            const customDataInput = document.getElementById('customData');
+            const applyCustomDataBtn = document.getElementById('applyCustomDataBtn');
+            const stepByStepModeToggle = document.getElementById('stepByStepModeToggle');
+            const prevStepBtn = document.getElementById('prevStepBtn');
+            const nextStepBtn = document.getElementById('nextStepBtn');
+
+
+            let chart;
+            let data = [];
+            let animationSpeed = 200;
+            let sortGenerator;
+            let animationFrameId;
+            let isSorting = false;
+            let animationHistory = [];
+            let currentStepIndex = 0;
+
+            const generateRandomData = (size) => {
+                const arr = [];
+                for (let i = 0; i < size; i++) {
+                    arr.push(Math.floor(Math.random() * 100) + 1);
+                }
+                return arr;
+            };
+
+            const createChart = (initialData) => {
+                if (chart) {
+                    chart.destroy();
+                }
+                data = [...initialData];
+                const ctx = sortChartCanvas.getContext('2d');
+                chart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.map((_, i) => i),
+                        datasets: [{
+                            label: 'データ値',
+                            data: data,
+                            backgroundColor: '#A1C398',
+                            borderColor: '#799351',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { enabled: false }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, display: false },
+                            x: { display: false }
+                        },
+                        animation: { duration: 1 }
+                    }
+                });
+            };
+            
+            function highlightCode(lines) {
+                document.querySelectorAll('.code-line').forEach(el => el.classList.remove('highlight'));
+                if (Array.isArray(lines)) {
+                    lines.forEach(line => {
+                        const el = document.getElementById(`code-line-${line}`);
+                        if (el) el.classList.add('highlight');
+                    });
+                } else {
+                    const el = document.getElementById(`code-line-${lines}`);
+                    if (el) el.classList.add('highlight');
+                }
+            }
+
+            // This generator now returns the full history of states
+            function getBubbleSortHistory(arr, optimized) {
+                let n = arr.length;
+                let localArr = [...arr];
+                const history = [];
+
+                history.push({ array: [...localArr], comparing: [], swapped: [], sorted: [], explanation: "ソートを開始します。", codeLine: 0 });
+                history.push({ array: [...localArr], comparing: [], swapped: [], sorted: [], explanation: `配列の長さ ${n} を取得します。`, codeLine: 1 });
+
+                for (let i = 0; i < n; i++) {
+                    history.push({ array: [...localArr], comparing: [], swapped: [], sorted: localArr.slice(n - i), explanation: `パス ${i + 1} を開始します。`, codeLine: 2 });
+                    
+                    let hasSwapped = false;
+                    history.push({ array: [...localArr], comparing: [], swapped: [], sorted: localArr.slice(n - i), explanation: `交換フラグを初期化します。`, codeLine: 3 });
+
+                    for (let j = 0; j < n - i - 1; j++) {
+                        history.push({ array: [...localArr], comparing: [j, j + 1], swapped: [], sorted: localArr.slice(n - i), explanation: `パス ${i + 1} の内部ループを開始します。`, codeLine: 4 });
+                        
+                        history.push({ array: [...localArr], comparing: [j, j + 1], swapped: [], sorted: localArr.slice(n - i), explanation: `${localArr[j]} と ${localArr[j+1]} を比較します。`, codeLine: 5 });
+
+                        if (localArr[j] > localArr[j + 1]) {
+                            [localArr[j], localArr[j + 1]] = [localArr[j + 1], localArr[j]];
+                            hasSwapped = true;
+                            history.push({ array: [...localArr], comparing: [], swapped: [j, j + 1], sorted: localArr.slice(n - i), explanation: `${localArr[j+1]} と ${localArr[j]} を交換しました。`, codeLine: 6 });
+                            
+                            history.push({ array: [...localArr], comparing: [], swapped: [], sorted: localArr.slice(n - i), explanation: `交換フラグをTrueに設定します。`, codeLine: 7 });
+                        }
+                    }
+                    
+                    if (optimized) {
+                        history.push({ array: [...localArr], comparing: [], swapped: [], sorted: localArr.slice(n-i-1), explanation: `交換はありましたか？ (${hasSwapped})`, codeLine: 8 });
+                        if (!hasSwapped) {
+                            history.push({ array: [...localArr], comparing: [], swapped: [], sorted: localArr, explanation: "交換がなかったのでソートを終了します。", codeLine: 9 });
+                            break;
+                        }
+                    }
+                }
+                history.push({ array: [...localArr], comparing: [], swapped: [], sorted: localArr, explanation: "ソートが完了しました。", codeLine: 10 });
+                return history;
+            }
+
+            const displayStep = (index) => {
+                if (index < 0 || index >= animationHistory.length) {
+                    return;
+                }
+                currentStepIndex = index;
+                const step = animationHistory[currentStepIndex];
+                
+                chart.data.datasets[0].data = step.array;
+                chart.data.datasets[0].backgroundColor = step.array.map((_, i) => {
+                    if (step.sorted.includes(step.array[i]) && i >= step.array.length - step.sorted.length) return '#799351';
+                    if (step.comparing.includes(i)) return '#F5C7A9';
+                    if (step.swapped.includes(i)) return '#D4E2D4';
+                    return '#A1C398';
+                });
+                chart.update();
+                explanationBox.textContent = step.explanation;
+                highlightCode(step.codeLine);
+
+                prevStepBtn.disabled = currentStepIndex === 0;
+                nextStepBtn.disabled = currentStepIndex === animationHistory.length - 1;
+            };
+
+            const animateSort = () => {
+                if (!isSorting || currentStepIndex >= animationHistory.length) {
+                    isSorting = false;
+                    sortBtn.textContent = 'ソート開始';
+                    sortBtn.disabled = false;
+                    resetBtn.disabled = false;
+                    dataSizeSlider.disabled = false;
+                    customDataInput.disabled = false;
+                    applyCustomDataBtn.disabled = false;
+                    explanationBox.textContent = "ソートが完了しました。";
+                    chart.data.datasets[0].backgroundColor = '#799351';
+                    chart.update();
+                    return;
+                }
+                displayStep(currentStepIndex);
+                currentStepIndex++;
+                animationFrameId = setTimeout(animateSort, animationSpeed);
+            };
+
+            sortBtn.addEventListener('click', () => {
+                if (isSorting) {
+                    isSorting = false;
+                    clearTimeout(animationFrameId);
+                    sortBtn.textContent = '再開';
+                } else {
+                    isSorting = true;
+                    sortBtn.textContent = '一時停止';
+                    dataSizeSlider.disabled = true;
+                    customDataInput.disabled = true;
+                    applyCustomDataBtn.disabled = true;
+                    resetBtn.disabled = true;
+
+                    if (currentStepIndex === animationHistory.length) { // If already sorted, reset and start from beginning
+                         reset(parseInt(dataSizeSlider.value));
+                    }
+                    animateSort();
+                }
+            });
+
+            const reset = (size, customArr = null) => {
+                isSorting = false;
+                clearTimeout(animationFrameId);
+                const initialData = customArr ? customArr : generateRandomData(size);
+                createChart(initialData);
+                animationHistory = getBubbleSortHistory(data, optimizationToggle.checked);
+                currentStepIndex = 0;
+                displayStep(currentStepIndex); // Display initial state
+
+                sortBtn.disabled = false;
+                sortBtn.textContent = 'ソート開始';
+                resetBtn.disabled = false;
+                dataSizeSlider.disabled = false;
+                customDataInput.disabled = false;
+                applyCustomDataBtn.disabled = false;
+                explanationBox.textContent = "操作を開始してください。";
+                highlightCode([]);
+
+                // Update step button states
+                prevStepBtn.disabled = currentStepIndex === 0 || !stepByStepModeToggle.checked;
+                nextStepBtn.disabled = currentStepIndex === animationHistory.length - 1 || !stepByStepModeToggle.checked;
+            };
+            
+            resetBtn.addEventListener('click', () => reset(parseInt(dataSizeSlider.value)));
+            
+            dataSizeSlider.addEventListener('input', (e) => {
+                const size = parseInt(e.target.value);
+                dataSizeValue.textContent = size;
+                try {
+                    reset(size);
+                } catch (error) {
+                    explanationBox.textContent = `エラーが発生しました: ${error.message}`;
+                    console.error("Error during reset:", error);
+                }
+            });
+
+            speedSlider.addEventListener('input', (e) => {
+                animationSpeed = 1010 - parseInt(e.target.value);
+                speedValue.textContent = `${e.target.value}`;
+            });
+            
+            applyCustomDataBtn.addEventListener('click', () => {
+                const text = customDataInput.value;
+                const arr = text.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n));
+                if (arr.length > 0) {
+                    dataSizeSlider.value = arr.length;
+                    dataSizeValue.textContent = arr.length;
+                    try {
+                        reset(arr.length, arr);
+                    } catch (error) {
+                        explanationBox.textContent = `エラーが発生しました: ${error.message}`;
+                        console.error("Error during reset with custom data:", error);
+                    }
+                } else {
+                    explanationBox.textContent = "エラー: 有効な数値をカンマ区切りで入力してください。";
+                    setTimeout(() => explanationBox.textContent = "操作を開始してください。", 3000);
+                }
+            });
+
+            stepByStepModeToggle.addEventListener('change', () => {
+                const isChecked = stepByStepModeToggle.checked;
+                speedSlider.disabled = isChecked;
+                sortBtn.disabled = isChecked; // Disable auto-play button
+                prevStepBtn.disabled = !isChecked || currentStepIndex === 0;
+                nextStepBtn.disabled = !isChecked || currentStepIndex === animationHistory.length - 1;
+
+                if (isChecked) {
+                    clearTimeout(animationFrameId); // Stop auto-play if running
+                    isSorting = false;
+                    sortBtn.textContent = '自動再生開始'; // Change button text
+                    explanationBox.textContent = "ステップ実行モードが有効です。自動再生は停止し、ステップボタンで操作してください。";
+                } else {
+                    sortBtn.textContent = 'ソート開始'; // Revert button text
+                    explanationBox.textContent = "操作を開始してください。";
+                }
+            });
+
+            prevStepBtn.addEventListener('click', () => {
+                if (currentStepIndex > 0) {
+                    displayStep(currentStepIndex - 1);
+                }
+            });
+
+            nextStepBtn.addEventListener('click', () => {
+                if (currentStepIndex < animationHistory.length - 1) {
+                    displayStep(currentStepIndex + 1);
+                }
+            });
+
+
+            // Complexity chart
+            const complexityCanvas = document.getElementById('complexityChart');
+            const complexityNSlider = document.getElementById('complexityN');
+            const complexityNValue = document.getElementById('complexityNValue');
+            const comparisonCount = document.getElementById('comparisonCount');
+            let complexityChart;
+
+            const updateComplexityChart = (n) => {
+                const dataPoints = [];
+                for (let i = 2; i <= 100; i++) {
+                    dataPoints.push({x: i, y: i * (i - 1) / 2});
+                }
+                
+                if (complexityChart) {
+                    complexityChart.data.datasets[1].data = [{x: n, y: n * (n - 1) / 2}];
+                    complexityChart.update('none');
+                } else {
+                    complexityChart = new Chart(complexityCanvas, {
+                        type: 'line',
+                        data: {
+                            datasets: [
+                                {
+                                    label: '比較回数',
+                                    data: dataPoints,
+                                    borderColor: '#A1C398',
+                                    backgroundColor: 'transparent',
+                                    pointRadius: 0,
+                                    borderWidth: 2
+                                },
+                                {
+                                    label: '現在のN',
+                                    data: [{x: n, y: n * (n - 1) / 2}],
+                                    borderColor: '#799351',
+                                    backgroundColor: '#799351',
+                                    pointRadius: 5,
+                                    pointHoverRadius: 7,
+                                    type: 'bubble'
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                x: { type: 'linear', position: 'bottom', title: { display: true, text: 'データ数 (N)' } },
+                                y: { title: { display: true, text: '比較回数' } }
+                            },
+                            plugins: { legend: { display: false } }
+                        }
+                    });
+                }
+                complexityNValue.textContent = n;
+                comparisonCount.textContent = n * (n - 1) / 2;
+            };
+
+            complexityNSlider.addEventListener('input', (e) => {
+                updateComplexityChart(parseInt(e.target.value));
+            });
+            
+            // Quiz logic
+            const quizContainer = document.getElementById('quiz-container');
+            const quizData = [
+                {
+                    question: "バブルソートの平均的な計算量はどれですか？",
+                    options: ["O(N)", "O(N log N)", "O(N²)"],
+                    answer: "O(N²)"
+                },
+                {
+                    question: "すでにソート済みの配列に対して、最適化されたバブルソートを実行した場合の計算量はどれですか？",
+                    options: ["O(N)", "O(N log N)", "O(N²)"],
+                    answer: "O(N)"
+                },
+                {
+                    question: "バブルソートの1回のパスで、どの要素が正しい位置に移動しますか？",
+                    options: ["未ソート部分の最小値", "未ソート部分の最大値", "中央値"],
+                    answer: "未ソート部分の最大値"
+                },
+                {
+                    question: "バブルソートは「安定ソート」ですか？",
+                    options: ["はい", "いいえ"],
+                    answer: "はい"
+                }
+            ];
+            
+            function buildQuiz() {
+                quizContainer.innerHTML = '<h3 class="text-xl font-bold mb-4">クイズで復習しよう！</h3>';
+                quizData.forEach((q, index) => {
+                    const questionEl = document.createElement('div');
+                    questionEl.classList.add('mb-6');
+                    questionEl.innerHTML = `<p class="font-semibold mb-2">${index + 1}. ${q.question}</p>`;
+                    
+                    const optionsEl = document.createElement('div');
+                    optionsEl.classList.add('space-y-2');
+                    
+                    q.options.forEach(option => {
+                        const optionId = `q${index}-opt${option.replace(/\s/g, '')}`;
+                        optionsEl.innerHTML += `
+                            <div>
+                                <input type="radio" id="${optionId}" name="question${index}" value="${option}" class="mr-2">
+                                <label for="${optionId}">${option}</label>
+                            </div>
+                        `;
+                    });
+                    questionEl.appendChild(optionsEl);
+                    quizContainer.appendChild(questionEl);
+                });
+                
+                const submitBtn = document.createElement('button');
+                submitBtn.textContent = '答え合わせ';
+                submitBtn.classList.add('control-button', 'bg-[#799351]', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded-lg', 'mt-4');
+                submitBtn.addEventListener('click', checkQuiz);
+                quizContainer.appendChild(submitBtn);
+                
+                const resultsEl = document.createElement('div');
+                resultsEl.id = 'quiz-results';
+                resultsEl.classList.add('mt-4');
+                quizContainer.appendChild(resultsEl);
+            }
+
+            function checkQuiz() {
+                let score = 0;
+                quizData.forEach((q, index) => {
+                    const selected = document.querySelector(`input[name="question${index}"]:checked`);
+                    if (selected && selected.value === q.answer) {
+                        score++;
+                    }
+                });
+                const resultsEl = document.getElementById('quiz-results');
+                resultsEl.innerHTML = `<p class="text-lg font-bold">結果: ${quizData.length}問中 ${score}問正解！</p>`;
+            }
+
+
+            // Initial setup
+            reset(15);
+            updateComplexityChart(10);
+            buildQuiz();
+        });
+    </script>
+</body>
+</html>

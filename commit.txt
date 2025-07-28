@@ -1,1 +1,1 @@
-docs: Add commit_message.txt to .gitignore
+refactor(docs): index.htmlの視認性向上

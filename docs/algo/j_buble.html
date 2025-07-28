@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【共通テスト対策】バブルソート徹底解説</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Noto Sans JP', 'Inter', sans-serif;
+        }
+        /* アクティブなタブボタンのスタイル */
+        .tab-button.active {
+            border-color: #3b82f6; /* blue-500 */
+            background-color: #3b82f6;
+            color: white;
+            font-weight: 600;
+        }
+        /* 非アクティブなタブボタンのスタイル */
+        .tab-button {
+            transition: all 0.3s ease;
+        }
+        /* コードブロックのスタイル */
+        pre {
+            background-color: #1f2937; /* gray-800 */
+            color: #d1d5db; /* gray-300 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-family: 'Menlo', 'Consolas', monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .code-comment {
+            color: #6b7280; /* gray-500 */
+        }
+        .code-keyword {
+            color: #a78bfa; /* violet-400 */
+        }
+        .code-variable {
+            color: #93c5fd; /* blue-300 */
+        }
+        .code-function {
+            color: #60a5fa; /* blue-400 */
+        }
+        .code-number {
+            color: #f9a8d4; /* pink-300 */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="mb-8 text-center">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900">【共通テスト対策】アルゴリズム徹底解説</h1>
+            <p class="mt-2 text-lg text-gray-600">バブルソート（降順）のプログラムを読み解く</p>
+        </header>
+
+        <main class="bg-white rounded-xl shadow-lg">
+            <!-- タブボタン -->
+            <div class="border-b border-gray-200">
+                <nav class="flex flex-wrap -mb-px p-4" aria-label="Tabs">
+                    <button class="tab-button active text-lg md:text-xl font-medium mr-2 mb-2 py-3 px-5 border-b-4 border-transparent rounded-t-lg hover:bg-gray-200" data-tab="tab1">
+                        プログラム全体像
+                    </button>
+                    <button class="tab-button text-lg md:text-xl font-medium mr-2 mb-2 py-3 px-5 border-b-4 border-transparent rounded-t-lg hover:bg-gray-200" data-tab="tab2">
+                        1行ずつ徹底解説
+                    </button>
+                    <button class="tab-button text-lg md:text-xl font-medium mr-2 mb-2 py-3 px-5 border-b-4 border-transparent rounded-t-lg hover:bg-gray-200" data-tab="tab3">
+                        仕組みを図解
+                    </button>
+                    <button class="tab-button text-lg md:text-xl font-medium mr-2 mb-2 py-3 px-5 border-b-4 border-transparent rounded-t-lg hover:bg-gray-200" data-tab="tab4">
+                        共通テスト対策
+                    </button>
+                </nav>
+            </div>
+
+            <!-- タブコンテンツ -->
+            <div class="p-6 md:p-8">
+                <!-- タブ1: プログラム全体像 -->
+                <div id="tab1" class="tab-content">
+                    <h2 class="text-2xl font-bold mb-4">プログラムの全体像と実行結果</h2>
+                    <p class="mb-6">まず、今回解説するPythonプログラムの全体像を見てみましょう。このプログラムは、リスト（配列）`Time` に格納された数値を**大きい順（降順）**に並べ替えるものです。</p>
+                    
+                    <h3 class="text-xl font-semibold mb-2">Pythonコード</h3>
+                    <pre><code><span class="code-variable">Time</span> = [<span class="code-number">72</span>,<span class="code-number">68</span>,<span class="code-number">70</span>,<span class="code-number">73</span>,<span class="code-number">69</span>,<span class="code-number">71</span>,<span class="code-number">74</span>,<span class="code-number">66</span>,<span class="code-number">67</span>,<span class="code-number">75</span>,<span class="code-number">65</span>,<span class="code-number">76</span>]
+
+<span class="code-comment"># バブルソートによる降順ソート</span>
+<span class="code-keyword">for</span> i <span class="code-keyword">in</span> <span class="code-function">range</span>(<span class="code-number">11</span>, <span class="code-number">0</span>, -<span class="code-number">1</span>):
+    <span class="code-keyword">for</span> j <span class="code-keyword">in</span> <span class="code-function">range</span>(<span class="code-number">0</span>, i, <span class="code-number">1</span>):
+        <span class="code-comment"># 隣り合う要素を比較</span>
+        <span class="code-keyword">if</span> <span class="code-variable">Time</span>[j] &lt; <span class="code-variable">Time</span>[j+<span class="code-number">1</span>]:
+            <span class="code-comment"># 要素を交換（スワップ）</span>
+            temp = <span class="code-variable">Time</span>[j]
+            <span class="code-variable">Time</span>[j] = <span class="code-variable">Time</span>[j+<span class="code-number">1</span>]
+            <span class="code-variable">Time</span>[j+<span class="code-number">1</span>] = temp
+
+<span class="code-comment"># 結果を出力</span>
+<span class="code-function">print</span>(<span class="code-variable">Time</span>)</code></pre>
+
+                    <h3 class="text-xl font-semibold mt-6 mb-2">実行結果</h3>
+                    <p class="mb-4">このプログラムを実行すると、リストの中身が綺麗に並べ替えられ、以下のように出力されます。</p>
+                    <pre><code>[<span class="code-number">76</span>, <span class="code-number">75</span>, <span class="code-number">74</span>, <span class="code-number">73</span>, <span class="code-number">72</span>, <span class="code-number">71</span>, <span class="code-number">70</span>, <span class="code-number">69</span>, <span class="code-number">68</span>, <span class="code-number">67</span>, <span class="code-number">66</span>, <span class="code-number">65</span>]</code></pre>
+                </div>
+
+                <!-- タブ2: 1行ずつ徹底解説 -->
+                <div id="tab2" class="tab-content hidden">
+                    <h2 class="text-2xl font-bold mb-4">プログラムの1行ずつ徹底解説</h2>
+                    <p class="mb-6">プログラムが何をしているのか、パーツに分けて詳しく見ていきましょう。</p>
+                    
+                    <div class="mb-6 border-l-4 border-blue-500 pl-4">
+                        <h4 class="text-lg font-semibold">1. データの準備</h4>
+                        <pre><code><span class="code-variable">Time</span> = [<span class="code-number">72</span>,<span class="code-number">68</span>,<span class="code-number">70</span>,...]</code></pre>
+                        <p class="mt-2">まず、並べ替えたい12個の数値が入ったリスト（共通テストの疑似言語では「配列」）を`Time`という名前の変数に準備します。</p>
+                    </div>
+
+                    <div class="mb-6 border-l-4 border-blue-500 pl-4">
+                        <h4 class="text-lg font-semibold">2. 外側のループ（走査範囲の制御）</h4>
+                        <pre><code><span class="code-keyword">for</span> i <span class="code-keyword">in</span> <span class="code-function">range</span>(<span class="code-number">11</span>, <span class="code-number">0</span>, -<span class="code-number">1</span>):</code></pre>
+                        <p class="mt-2">ここからが並べ替えの本体です。これは「二重ループ」の外側です。<br>
+                        `range(11, 0, -1)`は、変数 `i` の値を `11` からスタートし、`1` ずつ減らし、`1` になるまでループを繰り返す命令です。つまり、`i` は `11, 10, 9, ..., 1` と変化します。<br>
+                        このループは、比較する範囲を徐々に狭めていく役割を持ちます。</p>
+                    </div>
+
+                    <div class="mb-6 border-l-4 border-blue-500 pl-4">
+                        <h4 class="text-lg font-semibold">3. 内側のループ（隣同士の比較）</h4>
+                        <pre><code>    <span class="code-keyword">for</span> j <span class="code-keyword">in</span> <span class="code-function">range</span>(<span class="code-number">0</span>, i, <span class="code-number">1</span>):</code></pre>
+                        <p class="mt-2">こちらが「二重ループ」の内側です。<br>
+                        `range(0, i, 1)`は、変数 `j` の値を `0` からスタートし、`1` ずつ増やし、`i-1` になるまで繰り返します。<br>
+                        例えば、外側の `i` が `11` のとき、`j` は `0, 1, ..., 10` と変化します。`i` が `10` のときは `j` は `0, 1, ..., 9` と変化します。<br>
+                        このループで、リストの要素を先頭から隣同士で比較していきます。</p>
+                    </div>
+
+                    <div class="mb-6 border-l-4 border-blue-500 pl-4">
+                        <h4 class="text-lg font-semibold">4. 条件分岐（順序の確認）</h4>
+                        <pre><code>        <span class="code-keyword">if</span> <span class="code-variable">Time</span>[j] &lt; <span class="code-variable">Time</span>[j+<span class="code-number">1</span>]:</code></pre>
+                        <p class="mt-2">`Time[j]`（左側の要素）と `Time[j+1]`（右隣の要素）の大きさを比較します。<br>
+                        もし「左側 ＜ 右側」なら、降順（大きい順）にしたいので、これは望ましくない順序です。この条件が満たされた（真/Trueになった）場合、次の「交換」処理が実行されます。</p>
+                    </div>
+
+                    <div class="mb-6 border-l-4 border-blue-500 pl-4">
+                        <h4 class="text-lg font-semibold">5. 交換（スワップ）処理</h4>
+                        <pre><code>            temp = <span class="code-variable">Time</span>[j]
+            <span class="code-variable">Time</span>[j] = <span class="code-variable">Time</span>[j+<span class="code-number">1</span>]
+            <span class="code-variable">Time</span>[j+<span class="code-number">1</span>] = temp</code></pre>
+                        <p class="mt-2">2つの要素の値を入れ替える処理で、「スワップ」と呼ばれます。
+                        <ul class="list-disc list-inside mt-2 space-y-1">
+                            <li>一時的な変数 `temp` に左側の値 (`Time[j]`) を避難させます。</li>
+                            <li>空になった左側の場所に、右側の値 (`Time[j+1]`) を入れます。</li>
+                            <li>右側の場所に、避難させておいた `temp` の値を入れます。</li>
+                        </ul>
+                        これにより、大きい方の値が左に移動します。</p>
+                    </div>
+                </div>
+
+                <!-- タブ3: 仕組みを図解 -->
+                <div id="tab3" class="tab-content hidden">
+                    <h2 class="text-2xl font-bold mb-4">バブルソートの仕組みを図解</h2>
+                    <p class="mb-6">バブルソートは、隣り合う要素を比較して交換していくことを繰り返すことで、全体を整列させます。このプログラムの動きをステップごとに見てみましょう。</p>
+                    <p class="mb-4">このアルゴリズムでは、内側のループが1周する（これを「1回のパス」と呼びます）ごとに、**その時点で最も小さい値が、比較範囲の右端に確定**します。泡が浮き上がる様子に似ていることから「バブルソート」と呼ばれます。</p>
+                    
+                    <h3 class="text-xl font-semibold mt-6 mb-2">最初の状態</h3>
+                    <pre>[72, 68, 70, 73, 69, 71, 74, 66, 67, 75, 65, 76]</pre>
+
+                    <h3 class="text-xl font-semibold mt-6 mb-2">1回目のパス (i = 11)</h3>
+                    <p class="mb-2">`j`が`0`から`10`まで動きます。隣同士を比較し、`左 < 右` なら交換します。</p>
+                    <ul class="list-decimal list-inside space-y-2 text-sm md:text-base">
+                        <li>`j=0`: [<u>72</u>, <u>68</u>] → 比較 (72 > 68) → 交換なし</li>
+                        <li>`j=1`: [72, <u>68</u>, <u>70</u>] → 比較 (68 < 70) → 交換 → [72, 70, 68, ...]</li>
+                        <li>`j=2`: [72, 70, <u>68</u>, <u>73</u>] → 比較 (68 < 73) → 交換 → [72, 70, 73, 68, ...]</li>
+                        <li>...この処理を最後まで繰り返します...</li>
+                    </ul>
+                    <p class="mt-4">このパスが終わると、最も小さい値 `65` がリストの一番右端に移動して確定します。</p>
+                    <h4 class="font-semibold mt-2">1回目のパス終了後（のイメージ）</h4>
+                    <pre>[..., <span class="bg-blue-900 text-white px-1 rounded">66</span>, <span class="bg-green-900 text-white px-1 rounded">65</span>]</pre>
+                    <p class="text-sm mt-1">（※実際には他の要素も移動しますが、重要なのは一番小さい値 `65` が右端に確定することです）</p>
+
+                    <h3 class="text-xl font-semibold mt-6 mb-2">2回目のパス (i = 10)</h3>
+                    <p class="mb-2">`j`が`0`から`9`まで動きます。比較範囲が右端の一つ手前までになります（`Time[11]`は既に最小値で確定済みのため）。このパスが終わると、2番目に小さい値 `66` が右から2番目に確定します。</p>
+                    <h4 class="font-semibold mt-2">2回目のパス終了後（のイメージ）</h4>
+                    <pre>[..., <span class="bg-blue-900 text-white px-1 rounded">67</span>, <span class="bg-green-900 text-white px-1 rounded">66</span>, <span class="bg-green-900 text-white px-1 rounded">65</span>]</pre>
+
+                    <h3 class="text-xl font-semibold mt-6 mb-2">以降のパス</h3>
+                    <p class="mb-2">この操作を `i` が `1` になるまで繰り返します。パスを重ねるごとに、比較範囲が狭まり、小さい順に右側から要素が確定していきます。</p>
+                    
+                    <h3 class="text-xl font-semibold mt-6 mb-2">最終結果</h3>
+                    <p class="mb-2">全てのパスが終了すると、リスト全体が降順に並べ替えられます。</p>
+                    <pre>[76, 75, 74, 73, 72, 71, 70, 69, 68, 67, 66, 65]</pre>
+                </div>
+
+                <!-- タブ4: 共通テスト対策 -->
+                <div id="tab4" class="tab-content hidden">
+                    <h2 class="text-2xl font-bold mb-4">共通テスト対策としての重要ポイント</h2>
+                    <p class="mb-6">このプログラムを通じて、共通テスト「情報Ⅰ」で問われる可能性のあるポイントを整理しましょう。</p>
+
+                    <div class="space-y-6">
+                        <div class="p-4 border rounded-lg bg-gray-50">
+                            <h3 class="text-xl font-semibold text-blue-700">ポイント1：アルゴリズムの読解力</h3>
+                            <p class="mt-2">ループ変数がどのように変化するか、条件分岐が何を判定しているかを正確に追うことが最も重要です。</p>
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><strong>ループ範囲の確認</strong>: `i を N-1 から 1 まで`、`j を 0 から i-1 まで`という範囲をしっかり把握しましょう。</li>
+                                <li><strong>条件分岐の向き</strong>: `A < B` を `A > B` に変えるとどうなるか？ → 昇順（小さい順）になります。この違いが結果にどう影響するかを問う問題は頻出です。</li>
+                            </ul>
+                        </div>
+
+                        <div class="p-4 border rounded-lg bg-gray-50">
+                            <h3 class="text-xl font-semibold text-blue-700">ポイント2：計算量</h3>
+                            <p class="mt-2">アルゴリズムの効率性を表す「計算量」は重要な概念です。バブルソートは、比較的効率の悪いアルゴリズムとして知られています。</p>
+                             <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><strong>比較回数</strong>: 要素数を$N$とすると、比較回数は $\frac{N(N-1)}{2}$ 回です。今回の例では $N=12$ なので、$12 \times 11 / 2 = 66$ 回の比較が行われます。</li>
+                                <li><strong>オーダー記法</strong>: このような$N^2$に比例する計算量を $O(N^2)$（オーダーエヌ二乗）と表現します。</li>
+                                <li><strong>特徴</strong>: 要素数が2倍になると、処理時間は約4倍になります。データ量が多い場合には非常に時間がかかるため、実用的な場面ではあまり使われません。</li>
+                                <li><strong>他のソートとの比較</strong>: 選択ソート、挿入ソートも $O(N^2)$ の仲間です。より高速なマージソートやクイックソート（平均 $O(N \log N)$）との性能比較が問われることがあります。</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="p-4 border rounded-lg bg-gray-50">
+                            <h3 class="text-xl font-semibold text-blue-700">ポイント3：共通テスト疑似言語(DNCL2)での表現</h3>
+                            <p class="mt-2">このPythonプログラムを、近年の共通テストで用いられる新しい疑似言語（DNCL2）の形式で記述すると以下のようになります。</p>
+                            <pre><code><span class="code-comment">// 手続きの定義 (DNCL2形式)</span>
+<span class="code-keyword">●手続き</span> 降順バブルソート(配列 A)
+  <span class="code-comment">// 変数の宣言</span>
+  <span class="code-keyword">変数</span> i, j, temp は整数
+  <span class="code-keyword">変数</span> N は整数
+  N ← 配列Aの要素数
+
+  <span class="code-comment">// 外側ループ</span>
+  <span class="code-keyword">繰返し</span> i を N-1 から 1 まで -1ずつ
+    <span class="code-comment">// 内側ループ</span>
+    <span class="code-keyword">繰返し</span> j を 0 から i-1 まで 1ずつ
+      <span class="code-comment">// 比較と交換</span>
+      <span class="code-keyword">もし</span> A[j] < A[j+1] <span class="code-keyword">なら</span>
+        temp ← A[j]
+        A[j] ← A[j+1]
+        A[j+1] ← temp
+      <span class="code-keyword">判断終わり</span>
+    <span class="code-keyword">繰返し終わり</span>
+  <span class="code-keyword">繰返し終わり</span>
+  <span class="code-keyword">戻り値</span> A
+<span class="code-keyword">●手続き終わり</span>
+
+<span class="code-comment">// メイン処理</span>
+<span class="code-keyword">●手続き</span> メイン()
+  <span class="code-keyword">配列</span> Time ← {72,68,70,73,69,71,74,66,67,75,65,76}
+  <span class="code-keyword">配列</span> 結果配列
+  結果配列 ← 降順バブルソート(Time)
+  表示(結果配列)
+<span class="code-keyword">●手続き終わり</span></code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // タブ切り替えのJavaScript
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+
+                // すべてのボタンのactiveクラスを削除
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                });
+
+                // クリックされたボタンにactiveクラスを追加
+                button.classList.add('active');
+
+                // すべてのコンテンツを非表示
+                tabContents.forEach(content => {
+                    content.classList.add('hidden');
+                });
+
+                // 対応するコンテンツを表示
+                const targetContent = document.getElementById(tabId);
+                if (targetContent) {
+                    targetContent.classList.remove('hidden');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
