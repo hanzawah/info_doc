@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ネットワークの仕組みと通信速度 解説</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            margin: 0 auto;
+            max-width: 800px;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            border-bottom: 2px solid #007BFF;
+            padding-bottom: 10px;
+            color: #0056b3;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+        }
+        h2 {
+            font-size: 2em;
+            margin-top: 40px;
+        }
+        h3 {
+            font-size: 1.5em;
+            border-bottom: 1px solid #007BFF;
+            margin-top: 30px;
+        }
+        .container {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .point {
+            background-color: #e7f3ff;
+            border-left: 5px solid #007BFF;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .point h3 {
+            border: none;
+            margin-top: 0;
+            color: #0056b3;
+        }
+        code {
+            background-color: #eee;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .answer {
+            font-weight: bold;
+            color: #d9534f;
+        }
+        .calculation {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>ネットワークの仕組みと通信速度<br>共通テスト対策ポイント解説</h1>
+
+    <div class="container">
+        <p><a href="network_speed_problem.pdf" target="_blank" rel="noopener noreferrer">元の問題PDFはこちら</a></p>
+        <p>
+            こんにちは！共通テスト「情報」の対策をしている皆さん、お疲れ様です。
+            今回は、多くの受験生がつまずきやすい「ネットワーク」と「通信速度」の問題について、丁寧に解説していきます。
+            問題のPDFを見ながら、この記事を読むと理解が深まります。一つずつ確認していきましょう！
+        </p>
+    </div>
+
+    <h2>問2 ネットワークの仕組み：IPアドレスの動きを追え！</h2>
+
+    <div class="container">
+        <p>この問題は、自宅のパソコン（LAN）からインターネット上のWebサイトにアクセスする時の「IPアドレス」の動きを理解しているかが問われています。</p>
+        
+        <h3>基本知識の確認</h3>
+        <ul>
+            <li><strong>プライベートIPアドレス</strong>: インターネットに直接接続していない、家や会社などの内部ネットワークで、組織が自由に割り当てて使えるIPv4アドレスです。使える範囲は以下の3種類に決められています。
+                <ul>
+                    <li><code>10.0.0.0</code>～<code>10.255.255.255</code></li>
+                    <li><code>172.16.0.0</code>～<code>172.31.255.255</code></li>
+                    <li><code>192.168.0.0</code>～<code>192.168.255.255</code></li>
+                </ul>
+                このアドレスは閉じたネットワーク内でのみ使われるため、別の家のネットワークで全く同じプライベートIPアドレスが使われていても問題ありません。世界中で膨大な数の機器がこれらのアドレスを利用しています。
+            </li>
+            <li style="background-color: #fffbe6; border: 1px solid #ffe58f; padding: 10px; border-radius: 5px; margin-top: 10px; margin-bottom: 10px;">
+                <strong>【この問題の重要ポイント】</strong><br>
+                問題文には「図4の『172.16』や『10.』で始まるIPアドレスをグローバルIPアドレスとして使用する」と明記されています。本来<code>172.16.x.x</code>はプライベートIPアドレスとして使われることが多い範囲ですが、<strong>この問題の中ではグローバルIPアドレスとして扱う</strong>、というルールです。問題文の指示を最優先で考えましょう。
+            </li>
+            <li><strong>グローバルIPアドレス</strong>: インターネットの世界で使われる、世界で一つだけのIPアドレス。プロバイダから割り当てられます。</li>
+            <li><strong>ルータ</strong>: 家のネットワーク（LAN）とインターネット（WAN）を繋ぐ重要な機器。プライベートIPアドレスとグローバルIPアドレスを相互に変換する<strong>NAT（NAPT）</strong>という機能を持っています。</li>
+            <li><strong>DNSサーバ</strong>: <code>www.example.com</code>のような人間が分かりやすいドメイン名を、<code>172.16.1.1</code>のようなコンピュータが通信に使うIPアドレスに変換してくれるサーバです。</li>
+        </ul>
+
+        <h3>処理の流れをステップごとに解説</h3>
+        <p>端末α（プライベートIP: <code>192.168.1.2</code>）が、Webページ<code>https://www.example.com/</code>を閲覧する流れを見ていきましょう。</p>
+        
+        <ol>
+            <li><strong>処理1</strong>: 端末αは、まず<code>www.example.com</code>のIPアドレスを知るために、設定されているDNSサーバ（この問題ではルータ）に問い合わせます。</li>
+            <li>
+                <strong>処理2</strong>: ルータは、端末αからの問い合わせをインターネット上のDNSサーバ（<code>10.1.0.1</code>）に中継します。この時、ルータは送信元のIPアドレスを、端末αのプライベートIP<code>192.168.1.2</code>から、ルータ自身の<strong>グローバルIP<code>172.16.100.1</code></strong>に書き換えます（これがNAT機能です）。なぜなら、プライベートIPのままではインターネット上のDNSサーバから返事をもらえないからです。<br>
+                よって、<span class="answer">空欄クの答えは ③ 172.16.100.1</span> です。
+            </li>
+            <li>
+                <strong>処理3</strong>: DNSサーバ（<code>10.1.0.1</code>）は、表2から<code>www.example.com</code>に対応するIPアドレスを探します。表を見ると、IPアドレスは<code>172.16.1.1</code>です。<br>
+                よって、<span class="answer">空欄ケの答えは ② 172.16.1.1</span> です。<br>
+                DNSサーバは、この答えを問い合わせ元である「ク」、つまりルータのグローバルIP<code>172.16.100.1</code>に返します。
+            </li>
+            <li>
+                <strong>処理4</strong>: ルータはDNSサーバから<code>172.16.1.1</code>という答えを受け取ります。ルータは「この問い合わせは元々、端末α（<code>192.168.1.2</code>）から来たものだ」と記憶しているので、その答えを端末αに返します。<br>
+                よって、<span class="answer">空欄コの答えは ⑤ 192.168.1.2</span> です。
+            </li>
+        </ol>
+        <p>この後、端末αはWebサーバのIPアドレス（ケ: <code>172.16.1.1</code>）が分かったので、そのIPアドレスに対して直接Webページのデータを要求しにいきます。</p>
+    </div>
+
+    <div class="point">
+        <h3>問2 共通テスト対策ポイント</h3>
+        <ul>
+            <li><strong>NAT（アドレス変換）の仕組みを理解する！</strong> LANからインターネットへ出る際は「送信元IPがプライベートIP → グローバルIPに変換される」。インターネットからLANへ戻る際は「宛先IPがグローバルIP → プライベートIPに変換される」。この動きを必ず押さえましょう。</li>
+            <li><strong>誰が誰と通信しているかを図で追う！</strong> 端末、ルータ、DNSサーバ、Webサーバの関係性を図でしっかり把握し、パケットがどのように流れていくかをイメージすることが重要です。</li>
+        </ul>
+    </div>
+
+    <h2>問3 通信速度の計算：単位変換がカギ！</h2>
+
+    <div class="container">
+        <p>計算問題は、落ち着いて単位を揃えれば必ず解けます。特に「ビット(b)」と「バイト(B)」の違いは頻出なので、絶対にマスターしましょう。</p>
+
+        <h3>最重要ポイント：ビットとバイト</h3>
+        <p>通信速度は<strong>bps (bits per second)</strong>、つまり「1秒間に何<strong>ビット</strong>送れるか」で表されます。<br>
+        一方、ファイルサイズは通常<strong>B (Byte, バイト)</strong>で表されます。</p>
+        <p class="answer" style="text-align: center; font-size: 1.5em;">1 バイト (B) = 8 ビット (b)</p>
+        <p>この関係を知らないと計算が全く合わなくなります。必ず覚えましょう！</p>
+
+        <h3>計算問題の解説</h3>
+        
+        <h4>サシ：通信速度の割合</h4>
+        <p>最大通信速度と実際の速度の割合を計算します。単位が揃っているか確認しましょう。</p>
+        <ul>
+            <li>最大速度: 1 Gbps = 1000 Mbps</li>
+            <li>実測速度: 160 Mbps</li>
+        </ul>
+        <p>単位が「Mbps」で揃っているので、そのまま計算できます。</p>
+        <div class="calculation">
+(160 Mbps ÷ 1000 Mbps) × 100 = 16 (%)
+        </div>
+        <p>よって、<span class="answer">サシの答えは 16</span> です。</p>
+
+        <h4>ス：データ受信にかかる時間</h4>
+        <p>60MBのデータを受信する時間を計算します。ここが一番の山場です！落ち着いて、単位を一つずつ揃えていきましょう。</p>
+
+        <p><strong>計算のコツ：いきなり大きな数字で計算しない！</strong></p>
+        <p>
+            この手の計算では、まず<strong>分数</strong>の形で式を立てて、計算の途中で<strong>約分</strong>するのが鉄則です。
+            <code>1,000,000</code> のような大きな数を約分で消すことで、計算ミスを劇的に減らせます。
+        </p>
+
+        <p><strong>Step 1: 式を分数の形で立てる</strong></p>
+        <p>基本の公式は「時間 = データ量 ÷ 速度」です。これを分数で書くとこうなります。</p>
+        <div class="calculation" style="text-align: center; font-size: 1.2em;">
+            時間 (秒) =
+            <div style="display: inline-block; text-align: center; vertical-align: middle;">
+                <span style="border-bottom: 1px solid black; padding: 0 5px;">データ量 (ビット)</span><br>
+                <span style="padding: 0 5px;">通信速度 (ビット/秒)</span>
+            </div>
+        </div>
+
+        <p><strong>Step 2: それぞれの数値を単位を揃えて式に入れる</strong></p>
+        <p>分子と分母の単位を「ビット」と「ビット/秒」に揃えていきます。</p>
+        <ul>
+            <li><b>データ量 (分子)</b>: 60 MB (メガバイト)
+                <ul>
+                    <li>→ 60 × 1,000,000 バイト</li>
+                    <li>→ <b>60 × 1,000,000 × 8 ビット</b> (1バイト=8ビット)</li>
+                </ul>
+            </li>
+            <li><b>通信速度 (分母)</b>: 160 Mbps (メガビーピーエス)
+                <ul>
+                    <li>→ <b>160 × 1,000,000 ビット/秒</b></li>
+                </ul>
+            </li>
+        </ul>
+
+        <p><strong>Step 3: 式を立てて、約分する！</strong></p>
+        <p>Step 2 の数値を Step 1 の分数に入れてみましょう。</p>
+        <div class="calculation" style="font-size: 1.2em;">
+            時間 = <div style="display: inline-block; text-align: center; vertical-align: middle;">
+                <span style="border-bottom: 1px solid black; padding: 0 5px;">60 × 1,000,000 × 8</span><br>
+                <span style="padding: 0 5px;">160 × 1,000,000</span>
+            </div>
+        </div>
+        <p>
+            見てください！分子と分母に同じ <code>1,000,000</code> (メガ) がありますね。これを約分して消してしまいます。
+        </p>
+        <div class="calculation" style="font-size: 1.2em;">
+            時間 = <div style="display: inline-block; text-align: center; vertical-align: middle;">
+                <span style="border-bottom: 1px solid black; padding: 0 5px;">60 × 8</span><br>
+                <span style="padding: 0 5px;">160</span>
+            </div>
+            =
+            <div style="display: inline-block; text-align: center; vertical-align: middle;">
+                <span style="border-bottom: 1px solid black; padding: 0 5px;">480</span><br>
+                <span style="padding: 0 5px;">160</span>
+            </div>
+        </div>
+        <p>
+            ここまでくれば簡単ですね。<code>480 ÷ 160</code> を計算します。（<code>48 ÷ 16</code> と同じです）
+        </p>
+        <div class="calculation">
+480 ÷ 160 = 3 (秒)
+        </div>
+        <p>よって、<span class="answer">スの答えは 3</span> です。大きな数字を扱わずに計算できましたね！</p>
+    </div>
+
+    <div class="point">
+        <h3>問3 共通テスト対策ポイント</h3>
+        <ul>
+            <li><strong>まず単位を確認！特に b (ビット) と B (バイト)！</strong> 計算問題が出てきたら、まず単位に丸をつけ、変換が必要かどうかを判断する癖をつけましょう。</li>
+            <li><strong>接頭辞（M, G）の意味を正確に！</strong> M (メガ) は 1000k、G (ギガ) は 1000M です。問題文に `1 Gbps = 1000 Mbps` のように定義が書かれていることが多いので、見落とさないようにしましょう。</li>
+            <li><strong>「時間 = データ量 ÷ 速度」の公式を覚える！</strong> これは「はじき（速さ・時間・距離）」の計算と同じです。落ち着いて当てはめれば大丈夫です。</li>
+        </ul>
+    </div>
+
+    <hr>
+    <p style="text-align: center; font-weight: bold;">解説は以上です。ネットワーク問題は仕組みさえ理解すれば得点源になります。頑張ってください！</p>
+
+</body>
+</html>
